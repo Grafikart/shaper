@@ -1,0 +1,22 @@
+export const words = {
+  'Balançoire': 1,
+  'Renard': 2,
+  'Fermeture éclair': 1,
+  'Harpon': 2,
+  'Calculette': 1,
+  'Enclume': 2,
+  'Puzzle': 1,
+  'Serveur': 2,
+  'Fusil': 1,
+  'Moteur': 2,
+  'Cible': 1,
+  'Chronomètre': 2,
+  'Cheminée': 1,
+  'Lanterne': 2,
+  'Grue': 1,
+  'Castor': 2,
+  'Papillon': 1,
+  'Vent': 2,
+  'Sucre': 1,
+  'Bambou': 2
+}
