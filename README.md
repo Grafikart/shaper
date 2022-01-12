@@ -1,4 +1,16 @@
+## TODO
+
+- Est-ce pertinent d'utiliser les SocketStream partout, un ID permettrait de simplifier les choses
+- Mettre en place le choix du pseudo pour les joueurs
+- Système de reconnection ? (persister l'ID)
+
 ## Historique
+
+### 12/01/2022, 2h00
+
+- Mise en place de la structure front
+- Communication avec les websockets
+- Structure du passage de messages
 
 ### 11/01/2022, 2h19
 

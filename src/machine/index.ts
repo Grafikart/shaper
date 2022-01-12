@@ -1,6 +1,6 @@
 import { createMachine } from 'xstate'
 import { canDrawLine, canJoinTeam, canStartGame, lobbyNotFull } from './guards'
-import { addPlayer, joinTeam, startGame } from './actions'
+import { addPlayer, joinTeam, removePlayer, startGame } from './actions'
 import type { Context, GameEvent } from '../types'
 
 export const GameMachine = createMachine<Context, GameEvent>({
@@ -14,7 +14,7 @@ export const GameMachine = createMachine<Context, GameEvent>({
     linesLimit: 15,
     guessWord: '',
     guessedWord: '',
-    currentPlayer: 0,
+    currentPlayer: '0',
   },
   states: {
     lobby: {
@@ -23,6 +23,10 @@ export const GameMachine = createMachine<Context, GameEvent>({
           target: 'lobby',
           cond: lobbyNotFull,
           actions: addPlayer
+        },
+        LEAVE_GAME: {
+          target: 'lobby',
+          actions: removePlayer
         },
         CHOOSE_TEAM: {
           target: 'lobby',
