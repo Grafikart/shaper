@@ -20,6 +20,7 @@ export const GameModel = createModel(
         team,
       }),
       leave: (playerId: Player["id"]) => ({ playerId }),
+      start: (playerId: Player["id"]) => ({ playerId }),
     },
   }
 );

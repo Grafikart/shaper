@@ -10,9 +10,8 @@ export function App() {
   const { state, context, sendMessage } = useGameContext();
   return (
     <div>
-      {state === "lobby" && (
-        <Lobby players={context.players!} sendMessage={sendMessage} />
-      )}
+      {state === "lobby" && <Lobby />}
+      {state === "chooseWord" && <div>Un joueur choisit un mot !</div>}
       <p>
         <strong>Etat :</strong> {state}
       </p>

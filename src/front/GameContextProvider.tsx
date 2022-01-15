@@ -1,23 +1,24 @@
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
 import type { ReactNode } from "react";
-import {
-  AppMessage,
-  GameContext,
-  GameEvent,
-  GameMachineStates,
-} from "../types";
+import { createContext, useContext, useEffect, useState } from "react";
+import { GameContext, GameEvent, GameEventEmitter } from "../types";
 import { GameStates } from "../machine/states";
 
-export type GameContextType = {
+type SocketMessage =
+  | {
+      type: "auth";
+      userId: string;
+    }
+  | {
+      type: "gameUpdate";
+      state: GameStates;
+      context: GameContext;
+    };
+
+type GameContextType = {
   state: GameStates;
   context: GameContext;
-  sendMessage: (data: GameEvent) => void;
+  userId: string;
+  sendMessage: GameEventEmitter;
 };
 
 const Context = createContext<GameContextType>({
@@ -30,7 +31,14 @@ type Props = {
   children: ReactNode;
 };
 
-const socket = new WebSocket("ws://localhost:8000/ws");
+const searchParams = new URLSearchParams();
+const userId = localStorage.getItem("userId");
+if (userId) {
+  searchParams.set("userId", userId);
+}
+const socket = new WebSocket(
+  "ws://localhost:8000/ws?" + searchParams.toString()
+);
 const sendMessage: GameContextType["sendMessage"] = (data: GameEvent) => {
   socket.send(JSON.stringify(data));
 };
@@ -38,12 +46,19 @@ const sendMessage: GameContextType["sendMessage"] = (data: GameEvent) => {
 export function GameContextProvider({ children }: Props) {
   const [state, setState] = useState<Omit<GameContextType, "sendMessage">>({
     state: "" as GameStates,
+    userId: "",
     context: {} as GameContext,
   });
 
   useEffect(() => {
     const onMessage = (event: MessageEvent) => {
-      setState(JSON.parse(event.data));
+      const message = JSON.parse(event.data) as SocketMessage;
+      if (message.type === "auth") {
+        localStorage.setItem("userId", message.userId);
+        setState((s) => ({ ...s, userId: message.userId }));
+      } else {
+        setState((s) => ({ ...s, ...message }));
+      }
     };
     socket.addEventListener("message", onMessage);
 

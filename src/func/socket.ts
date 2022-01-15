@@ -14,6 +14,7 @@ export function publishContext(
     }
     connection.socket.send(
       JSON.stringify({
+        type: "gameUpdate",
         state: state,
         context: context,
       })

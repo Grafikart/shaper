@@ -6,6 +6,13 @@
 
 ## Historique
 
+### 15/01/2022, 2h30
+
+- Refactor de la machine pour de meilleur types
+- Simplification de la communication client / serveur
+- Persistence de l'état
+- Reconnexion des utilisateurs
+
 ### 12/01/2022, 2h00
 
 - Mise en place de la structure front

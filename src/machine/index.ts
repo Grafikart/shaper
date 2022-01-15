@@ -1,7 +1,6 @@
-import { createMachine } from "xstate";
 import { GameModel } from "./model";
 import { GameStates } from "./states";
-import { canJoinTeam, lobbyNotFull } from "./guards";
+import { canJoinGame, canJoinTeam, canStartGame } from "./guards";
 import { addPlayer, joinTeam, leave } from "./actions";
 
 export const GameMachine = GameModel.createMachine({
@@ -13,7 +12,7 @@ export const GameMachine = GameModel.createMachine({
       on: {
         join: {
           target: "lobby",
-          cond: lobbyNotFull,
+          cond: canJoinGame,
           actions: GameModel.assign(addPlayer),
         },
         joinTeam: {
@@ -25,8 +24,13 @@ export const GameMachine = GameModel.createMachine({
           target: "lobby",
           actions: GameModel.assign(leave),
         },
+        start: {
+          target: "chooseWord",
+          cond: canStartGame,
+        },
       },
     },
+    chooseWord: {},
   },
 });
 

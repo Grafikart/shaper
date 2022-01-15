@@ -15,17 +15,21 @@ export type Line = {
 export type Point = { x: number; y: number };
 
 export type GameContext = ContextFrom<typeof GameModel>;
-export type GameEvent = EventFrom<typeof GameModel>;
+export type GameEvent<
+  T extends EventFrom<typeof GameModel>["type"] = EventFrom<
+    typeof GameModel
+  >["type"]
+> = EventFrom<typeof GameModel> & { type: T };
 export type GameAction<T extends GameEvent["type"]> = (
   context: GameContext,
   event: GameEvent & { type: T }
 ) => Partial<GameContext>;
 
-export type GameMachineStates = string;
-
 export type GameGuard<T extends GameEvent["type"] = GameEvent["type"]> = (
   context: GameContext,
   event: GameEvent & { type: T }
 ) => boolean;
+
+export type GameEventEmitter = (event: GameEvent) => void;
 
 type ValueOf<T> = T[keyof T];
