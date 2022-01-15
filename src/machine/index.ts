@@ -1,72 +1,92 @@
-import { createMachine } from 'xstate'
-import { canDrawLine, canJoinTeam, canStartGame, lobbyNotFull } from './guards'
-import { addPlayer, joinTeam, removePlayer, startGame } from './actions'
-import type { Context, GameEvent } from '../types'
+import { createMachine } from "xstate";
+import { GameModel } from "./model";
+import { GameStates } from "./states";
+import { canJoinTeam, lobbyNotFull } from "./guards";
+import { addPlayer, joinTeam, leave } from "./actions";
 
-export const GameMachine = createMachine<Context, GameEvent>({
-  id: 'game',
-  initial: 'lobby',
-  context: {
-    players: [],
-    lines: [],
-    score: [0, 0],
-    playersLimit: 4,
-    linesLimit: 15,
-    guessWord: '',
-    guessedWord: '',
-    currentPlayer: '0',
-  },
+export const GameMachine = GameModel.createMachine({
+  id: "game",
+  initial: GameStates.lobby,
+  context: GameModel.initialContext,
   states: {
     lobby: {
       on: {
-        JOIN: {
-          target: 'lobby',
+        join: {
+          target: "lobby",
           cond: lobbyNotFull,
-          actions: addPlayer
+          actions: GameModel.assign(addPlayer),
+        },
+        joinTeam: {
+          target: "lobby",
+          cond: canJoinTeam,
+          actions: GameModel.assign(joinTeam),
+        },
+        leave: {
+          target: "lobby",
+          actions: GameModel.assign(leave),
+        },
+      },
+    },
+  },
+});
+
+/*
+export const GameMachine = createMachine<Context, GameEvent>({
+  id: "game",
+  initial: "lobby",
+  context: GameModel.initialContext,
+  states: {
+    lobby: {
+      on: {
+        join: {
+          target: "lobby",
+          cond: lobbyNotFull,
+          actions: addPlayer,
         },
         LEAVE_GAME: {
-          target: 'lobby',
-          actions: removePlayer
+          target: "lobby",
+          actions: removePlayer,
         },
         CHOOSE_TEAM: {
-          target: 'lobby',
+          target: "lobby",
           // On ne peux pas rejoindre les équipes déjà remplies
           cond: canJoinTeam,
-          actions: joinTeam
+          actions: joinTeam,
         },
         START: {
-          target: 'selectWord',
+          target: "selectWord",
           cond: canStartGame,
-          actions: startGame
-        }
-      }
+          actions: startGame,
+        },
+      },
     },
     selectWord: {
       on: {
-        SELECT: 'drawing'
-      }
+        SELECT: "drawing",
+      },
     },
     drawing: {
       on: {
         DRAW_LINE: {
-          target: 'drawing',
-          cond: canDrawLine
+          target: "drawing",
+          cond: canDrawLine,
         },
         GUESS: {
-          target: 'drawing'
+          target: "drawing",
         },
         TIME_OUT: {
-          target: 'roundEnd'
+          target: "roundEnd",
         },
         SUCCESS: {
-          target: 'roundEnd'
-        }
-      }
+          target: "roundEnd",
+        },
+      },
     },
     roundEnd: {
       on: {
-        NEXT: 'selectWord'
-      }
-    }
-  }
-})
+        NEXT: "selectWord",
+      },
+    },
+  },
+});
+*/

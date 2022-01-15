@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { useGameContext } from "./GameContext";
+import { useGameContext } from "./GameContextProvider";
 import { Lobby } from "./components/Lobby";
 
 type AppProps = {

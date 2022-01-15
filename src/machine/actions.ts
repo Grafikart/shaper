@@ -1,18 +1,23 @@
-import { assign } from "xstate";
-import { randomBetween } from "../func/number";
-import type { Context, GameEventForType } from "../types";
+import type { GameAction } from "../types";
 
-export const addPlayer = assign<Context, GameEventForType<"JOIN">>({
-  players: (context, event) => [
+export const addPlayer: GameAction<"join"> = (context, event) => ({
+  players: [
     ...context.players,
-    {
-      team: null,
-      connection: event.connection,
-      id: (Math.random() * 1000).toString(),
-    },
+    { id: event.playerId, name: event.name, team: null },
   ],
 });
 
+export const joinTeam: GameAction<"joinTeam"> = (context, event) => ({
+  players: context.players.map((p) =>
+    p.id === event.playerId ? { ...p, team: event.team } : p
+  ),
+});
+
+export const leave: GameAction<"leave"> = (context, event) => ({
+  players: context.players.filter((p) => p.id !== event.playerId),
+});
+
+/*
 export const removePlayer = assign(
   (context: Context, event: GameEventForType<"LEAVE_GAME">) => ({
     players: context.players.filter((p) => p.connection !== event.connection),
@@ -32,3 +37,4 @@ export const startGame = assign(
     // currentPlayer: randomBetween(0, context.players.length - 1),
   })
 );
+*/

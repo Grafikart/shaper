@@ -6,17 +6,23 @@ import {
   useState,
 } from "react";
 import type { ReactNode } from "react";
-import { AppMessage, Context, GameMachineStates } from "../types";
+import {
+  AppMessage,
+  GameContext,
+  GameEvent,
+  GameMachineStates,
+} from "../types";
+import { GameStates } from "../machine/states";
 
 export type GameContextType = {
-  state: GameMachineStates | null;
-  context: Partial<Context>;
-  sendMessage: (type: AppMessage["type"], data: AppMessage["data"]) => void;
+  state: GameStates;
+  context: GameContext;
+  sendMessage: (data: GameEvent) => void;
 };
 
-const GameContext = createContext<GameContextType>({
-  state: null,
-  context: {},
+const Context = createContext<GameContextType>({
+  state: "lobby" as GameStates,
+  context: {} as GameContext,
   sendMessage: () => null,
 });
 
@@ -25,19 +31,14 @@ type Props = {
 };
 
 const socket = new WebSocket("ws://localhost:8000/ws");
-const sendMessage: GameContextType["sendMessage"] = (type, data) => {
-  socket.send(
-    JSON.stringify({
-      type: type,
-      data: data,
-    })
-  );
+const sendMessage: GameContextType["sendMessage"] = (data: GameEvent) => {
+  socket.send(JSON.stringify(data));
 };
 
 export function GameContextProvider({ children }: Props) {
   const [state, setState] = useState<Omit<GameContextType, "sendMessage">>({
-    state: null,
-    context: {},
+    state: "" as GameStates,
+    context: {} as GameContext,
   });
 
   useEffect(() => {
@@ -52,12 +53,12 @@ export function GameContextProvider({ children }: Props) {
   }, []);
 
   return (
-    <GameContext.Provider value={{ ...state, sendMessage }}>
+    <Context.Provider value={{ ...state, sendMessage }}>
       {children}
-    </GameContext.Provider>
+    </Context.Provider>
   );
 }
 
 export function useGameContext() {
-  return useContext(GameContext);
+  return useContext(Context);
 }

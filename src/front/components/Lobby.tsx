@@ -1,9 +1,10 @@
 import type { ReactNode } from "react";
-import { Context, Player } from "../../types";
-import { GameContextType } from "../GameContext";
+import { GameContext, Player } from "../../types";
+import { GameContextType } from "../GameContextProvider";
+import { GameModel } from "../../machine/model";
 
 type LobbyProps = {
-  players: Context["players"];
+  players: GameContext["players"];
   sendMessage: GameContextType["sendMessage"];
 };
 
@@ -13,13 +14,14 @@ const playersForTeam = (team: number, players: Player[]) =>
 export function Lobby({ players, sendMessage }: LobbyProps) {
   const noTeamPlayers = players.filter((p) => p.team === null);
   const handleJoinTeam = (team: number) => () => {
-    sendMessage("chooseTeam", { team });
+    sendMessage(GameModel.events.joinTeam("", team));
+    // sendMessage("chooseTeam", { team });
   };
   return (
     <div>
       <ul>
         {noTeamPlayers.map((player) => (
-          <li key={player.id}>Joueur {player.id}</li>
+          <li key={player.id}>Joueur {player.name}</li>
         ))}
       </ul>
 
@@ -29,7 +31,7 @@ export function Lobby({ players, sendMessage }: LobbyProps) {
             <h2>TEAM {team + 1}</h2>
             <ul>
               {playersForTeam(team, players).map((player) => (
-                <li key={player.id}>Joueur {player.id}</li>
+                <li key={player.id}>Joueur {player.name}</li>
               ))}
             </ul>
             <button style={{ width: "auto" }} onClick={handleJoinTeam(team)}>

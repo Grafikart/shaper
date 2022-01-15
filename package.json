@@ -23,6 +23,7 @@
     "@types/node": "^17.0.8",
     "@types/react": "^17.0.33",
     "@types/react-dom": "^17.0.10",
+    "@types/uuid": "^8.3.4",
     "@types/ws": "^8.2.2",
     "@vitejs/plugin-react": "^1.0.7",
     "esno": "^0.13.0",
@@ -36,9 +37,11 @@
   "dependencies": {
     "fastify": "^3.25.3",
     "fastify-static": "^4.5.0",
+    "randanimal": "^1.0.4",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "ts-node-dev": "^1.1.8",
+    "uuid": "^8.3.2",
     "xstate": "^4.27.0"
   }
 }

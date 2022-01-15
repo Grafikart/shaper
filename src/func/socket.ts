@@ -1,20 +1,21 @@
-import { Context } from "../types";
-import { StateValue } from "xstate";
+import { GameContext } from "../types";
+import { GameStates } from "../machine/states";
+import { SocketStream } from "fastify-websocket";
 
-export function publishContext(state: StateValue, context: Context) {
+export function publishContext(
+  state: GameStates,
+  context: GameContext,
+  connections: Map<string, SocketStream>
+) {
   for (const player of context.players) {
-    player.connection.socket.send(
+    const connection = connections.get(player.id);
+    if (!connection) {
+      return;
+    }
+    connection.socket.send(
       JSON.stringify({
         state: state,
-        context: {
-          players: context.players.map((p) => ({ ...p, connection: null })),
-          lines: context.lines,
-          score: context.score,
-          playersLimit: context.playersLimit,
-          linesLimit: context.linesLimit,
-          guessedWord: context.guessedWord,
-          currentPlayer: context.currentPlayer,
-        },
+        context: context,
       })
     );
   }

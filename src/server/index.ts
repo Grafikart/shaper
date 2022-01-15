@@ -1,32 +1,23 @@
 import Fastify from "fastify";
-import FastifyWS from "fastify-websocket";
+import FastifyWS, { SocketStream } from "fastify-websocket";
 import FastifyStatic from "fastify-static";
 import path from "path";
 import { interpret } from "xstate";
 import { GameMachine } from "../machine";
+import { GameModel } from "../machine/model";
+import { v4 as uuid } from "uuid";
+import Randanimal from "randanimal";
 import { publishContext } from "../func/socket";
-import { AppMessage } from "../types";
-import { GameController } from "./GameController";
+import { GameStates } from "../machine/states";
+import { GameEvent } from "../types";
 
-// Machine instance with internal state
+const connections = new Map<string, SocketStream>();
+
 const gameService = interpret(GameMachine)
   .onTransition((state) => {
-    publishContext(state.value, state.context);
+    publishContext(state.value as GameStates, state.context, connections);
   })
   .start();
-
-/*
-
-gameService.send('JOIN', {playerId: 3})
-gameService.send('CHOOSE_TEAM', {team: 0, playerId: 3})
-gameService.send('JOIN', {playerId: 4})
-gameService.send('CHOOSE_TEAM', {team: 1, playerId: 4})
-gameService.send('JOIN', {playerId: 5})
-gameService.send('CHOOSE_TEAM', {team: 1, playerId: 5})
-gameService.send('JOIN', {playerId: 6})
-gameService.send('CHOOSE_TEAM', {team: 0, playerId: 6})
-gameService.send('START')
-*/
 
 const fastify = Fastify({ logger: true });
 fastify.register(FastifyWS);
@@ -36,14 +27,16 @@ fastify.register(FastifyStatic, {
 
 // Declare a route
 fastify.get("/ws", { websocket: true }, (connection, req) => {
-  const controller = new GameController(gameService, connection);
-  gameService.send("JOIN", { connection: connection });
+  const userId = uuid();
+  connections.set(userId, connection);
+  gameService.send(GameModel.events.join(userId, Randanimal.randanimalSync()));
   connection.socket.on("message", (rawMessage) => {
-    const message = JSON.parse(rawMessage.toLocaleString()) as AppMessage;
-    controller[message.type](message.data);
+    const message = JSON.parse(rawMessage.toLocaleString()) as GameEvent;
+    gameService.send({ ...message, playerId: userId });
   });
   connection.socket.on("close", (message) => {
-    gameService.send("LEAVE_GAME", { connection: connection });
+    connections.delete(userId);
+    gameService.send(GameModel.events.leave(userId));
   });
 });
 
