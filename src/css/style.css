@@ -1,0 +1,7 @@
+.animatedLine {
+  animation: .3s drawLine both;
+}
+
+@keyframes drawLine {
+  to {stroke-dashoffset: 0}
+}

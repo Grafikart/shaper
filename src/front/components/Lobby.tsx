@@ -1,24 +1,19 @@
-import { GameContext, GameEventEmitter, Player } from "../../types";
-import { GameModel } from "../../machine/model";
-import { canJoinTeam, canStartGame } from "../../machine/guards";
+import { GameContext, GameEventEmitter } from "../../types";
+import { GameModel } from "../../machine/GameModel";
+import { canReady, canStartGame } from "../../machine/guards";
 import { useGameContext } from "../GameContextProvider";
-import { MouseEventHandler } from "react";
+import { MouseEventHandler, SyntheticEvent } from "react";
 
 type LobbyProps = {
   context: GameContext;
   sendMessage: GameEventEmitter;
 };
 
-const playersForTeam = (team: number, players: Player[]) =>
-  players.filter((p) => p.team === team);
-
 export function Lobby() {
-  const { state, context, sendMessage, userId } = useGameContext();
-  const players = context.players;
-  const noTeamPlayers = players.filter((p) => p.team === null);
-  const handleJoinTeam = (team: number) => () => {
-    sendMessage(GameModel.events.joinTeam(userId, team));
-    // sendMessage("chooseTeam", { team });
+  const { context, sendMessage, userId } = useGameContext();
+  const handleReady = (e: SyntheticEvent) => {
+    e.preventDefault();
+    sendMessage(GameModel.events.ready(userId));
   };
   const handleStart: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
@@ -27,31 +22,16 @@ export function Lobby() {
   return (
     <div>
       <ul>
-        {noTeamPlayers.map((player) => (
-          <li key={player.id}>Joueur {player.name}</li>
+        {context.players.map((player) => (
+          <li key={player.id}>
+            Joueur {player.name} {player.ready ? "✅" : ""}{" "}
+          </li>
         ))}
       </ul>
 
-      <div style={{ display: "flex" }}>
-        {[0, 1].map((team) => (
-          <div key={team} style={{ width: "50%" }}>
-            <h2>TEAM {team + 1}</h2>
-            <ul>
-              {playersForTeam(team, players).map((player) => (
-                <li key={player.id}>Joueur {player.name}</li>
-              ))}
-            </ul>
-            <button
-              disabled={!canJoinTeam(context, { team: team })}
-              style={{ width: "auto" }}
-              onClick={handleJoinTeam(team)}
-            >
-              Rejoindre cette équipe
-            </button>
-          </div>
-        ))}
-      </div>
-
+      {canReady(context, GameModel.events.ready(userId)) && (
+        <button onClick={handleReady}>Je suis prêt</button>
+      )}
       <div>
         <button
           onClick={handleStart}

@@ -6,6 +6,13 @@
 
 ## Historique
 
+### 16/01/2022, 3h00
+
+- Refactor des fichiers de la machine (nommage plus clair)
+- Remplacement du système d'équipe
+- Création de la phase de choix de mot
+- Creation de la phase de dessin (via SVG)
+
 ### 15/01/2022, 2h30
 
 - Refactor de la machine pour de meilleur types

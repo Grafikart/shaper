@@ -1,5 +1,5 @@
 import { GameContext } from "../types";
-import { GameStates } from "../machine/states";
+import { GameStates } from "../machine/GameStates";
 import { SocketStream } from "fastify-websocket";
 
 export function publishContext(
@@ -9,15 +9,19 @@ export function publishContext(
 ) {
   for (const player of context.players) {
     const connection = connections.get(player.id);
-    if (!connection) {
-      return;
+    if (connection) {
+      const isCurrentPlayer = player.id === context.currentPlayer?.id;
+      connection.socket.send(
+        JSON.stringify({
+          type: "gameUpdate",
+          state: state,
+          context: {
+            ...context,
+            availableWords: isCurrentPlayer ? context.availableWords : [],
+            wordToGuess: isCurrentPlayer ? context.wordToGuess : null,
+          },
+        })
+      );
     }
-    connection.socket.send(
-      JSON.stringify({
-        type: "gameUpdate",
-        state: state,
-        context: context,
-      })
-    );
   }
 }

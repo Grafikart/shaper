@@ -3,20 +3,26 @@ import FastifyWS, { SocketStream } from "fastify-websocket";
 import FastifyStatic from "fastify-static";
 import path from "path";
 import { interpret } from "xstate";
-import { GameMachine } from "../machine";
-import { GameModel } from "../machine/model";
+import { GameMachine } from "../machine/GameMachine";
+import { GameModel } from "../machine/GameModel";
 import { v4 as uuid } from "uuid";
 import Randanimal from "randanimal";
 import { publishContext } from "../func/socket";
-import { GameStates } from "../machine/states";
+import { GameStates } from "../machine/GameStates";
 import { GameEvent } from "../types";
 import { MachinePersister } from "../machine/MachinePersister";
 
 const connections = new Map<string, SocketStream>();
 
 const previousMachineState = MachinePersister.retrieve();
+// On ne veut pas publier les choses tant que le service n'a pas reçu son contexte
+const serviceReady = { current: false };
+
 const gameService = interpret(GameMachine)
   .onTransition((state) => {
+    if (!serviceReady.current) {
+      return;
+    }
     console.log("State change");
     console.log("====");
     console.log(state.value, state.context);
@@ -38,6 +44,7 @@ fastify.register(FastifyWS);
 fastify.register(FastifyStatic, {
   root: path.resolve("./public"),
 });
+serviceReady.current = true;
 
 // Declare a route
 fastify.get("/ws", { websocket: true }, (connection, req) => {
@@ -45,11 +52,17 @@ fastify.get("/ws", { websocket: true }, (connection, req) => {
   const userId = query.userId ?? uuid();
   connections.set(userId, connection);
   gameService.send(GameModel.events.join(userId, Randanimal.randanimalSync()));
+  console.log("===========");
   connection.socket.send(
     JSON.stringify({
       type: "auth",
       userId: userId,
     })
+  );
+  publishContext(
+    gameService.state.value as GameStates,
+    gameService.state.context,
+    connections
   );
   connection.socket.on("message", (rawMessage) => {
     const message = JSON.parse(rawMessage.toLocaleString()) as GameEvent;

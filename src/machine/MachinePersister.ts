@@ -1,6 +1,6 @@
-import { GameStates } from "./states";
+import { GameStates } from "./GameStates";
 import { GameContext } from "../types";
-import { readFileSync, writeFile, writeFileSync } from "fs";
+import { readFileSync, writeFile } from "fs";
 
 const filePath = "./state.json";
 
@@ -24,6 +24,7 @@ export class MachinePersister {
     try {
       return JSON.parse(readFileSync(filePath).toLocaleString());
     } catch (e) {
+      console.error(e);
       return {
         state: undefined,
         context: {},

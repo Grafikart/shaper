@@ -1,10 +1,15 @@
 import { ContextFrom, EventFrom } from "xstate";
-import { GameModel } from "./machine/model";
+import { GameModel } from "./machine/GameModel";
+
+export type Word = {
+  name: string;
+  score: number;
+};
 
 export type Player = {
-  team: number | null;
   id: string;
   name: string;
+  ready: boolean;
 };
 
 export type Line = {
