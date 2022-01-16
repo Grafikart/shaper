@@ -10,7 +10,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "visualize": "esmo visualizer.ts"
   },
   "nodemonConfig": {
     "exec": "esmo",
@@ -35,6 +36,7 @@
     "vite": "^2.7.2"
   },
   "dependencies": {
+    "clipboardy": "^3.0.0",
     "fastify": "^3.25.3",
     "fastify-static": "^4.5.0",
     "randanimal": "^1.0.4",
