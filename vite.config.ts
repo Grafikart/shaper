@@ -14,6 +14,9 @@ export default defineConfig({
     outDir: "./public/assets/",
     rollupOptions: {
       output: {
+        entryFileNames: "[name].js",
+        chunkFileNames: "[name][extname]",
+        assetFileNames: "[name][extname]",
         manualChunks: undefined, // Désactive la séparation du vendor
       },
       input: {

@@ -38,8 +38,9 @@ const userId = localStorage.getItem("userId");
 if (userId) {
   searchParams.set("userId", userId);
 }
+
 const socket = new ReconnectingWebSocket(
-  "ws://localhost:8000/ws?" + searchParams.toString()
+  `${window.location.protocol.replace('http','ws')}//${window.location.host}/ws?${searchParams.toString()}`
 );
 const sendMessage: GameContextType["sendMessage"] = (data: GameEvent) => {
   socket.send(JSON.stringify(data));

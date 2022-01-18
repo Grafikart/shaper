@@ -24,7 +24,6 @@ export class MachinePersister {
     try {
       return JSON.parse(readFileSync(filePath).toLocaleString());
     } catch (e) {
-      console.error(e);
       return {
         state: undefined,
         context: {},

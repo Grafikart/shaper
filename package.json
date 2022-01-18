@@ -2,17 +2,18 @@
   "name": "shaper.io",
   "version": "1.0.0",
   "description": "",
-  "main": "src/server/index.js",
+  "main": "build/server/index.js",
   "type": "module",
   "engines": {
     "node": "17.x"
   },
   "scripts": {
-    "serve": "nodemon --ignore state.json src/server/index.ts",
-    "servee": "tsnd --inspect  --respawn src/server/index.ts",
+    "dev": "concurrently \"npm:start:watch\" \"vite\"",
+    "start:watch": "nodemon --ignore state.json src/server/index.ts",
+    "start": "npx esmo ./src/server/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "vite",
     "build": "tsc && vite build",
+    "lint": "tsc",
     "preview": "vite preview",
     "visualize": "esmo visualizer.ts"
   },
@@ -30,10 +31,9 @@
     "@types/uuid": "^8.3.4",
     "@types/ws": "^8.2.2",
     "@vitejs/plugin-react": "^1.0.7",
-    "esbuild": "^0.14.11",
-    "esbuild-node-externals": "^1.4.1",
-    "esno": "^0.13.0",
-    "fastify-websocket": "^4.0.0",
+    "concurrently": "^7.0.0",
+    "esmo": "^0.14.0",
+    "heroku": "^7.59.2",
     "localtunnel": "^2.0.2",
     "nodemon": "^2.0.15",
     "prettier": "^2.5.1",
@@ -45,12 +45,12 @@
     "clipboardy": "^3.0.0",
     "fastify": "^3.25.3",
     "fastify-static": "^4.5.0",
+    "fastify-websocket": "^4.0.0",
     "randanimal": "^1.0.4",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "reconnecting-websocket": "^4.4.0",
-    "ts-node-dev": "^1.1.8",
     "uuid": "^8.3.2",
-    "xstate": "^4.27.0"
+    "xstate": "4.27.0"
   }
 }
