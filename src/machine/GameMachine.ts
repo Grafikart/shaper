@@ -7,17 +7,26 @@ import {
   canReady,
   canStartGame,
   combineGuards,
+  hasWinner,
   isCurrentPlayer,
+  isRightWord,
+  reverseGuard,
 } from "./guards";
 import {
   addPlayer,
+  addScore,
   chooseWord,
   chooseWordRandomly,
   drawLine,
+  guessWord,
   leave,
   ready,
+  resetScores,
   startGame,
+  startRound,
 } from "./actions";
+import { Action } from "xstate";
+import { GameContext } from "../types";
 
 export const GameMachine = GameModel.createMachine({
   id: "game",
@@ -40,11 +49,12 @@ export const GameMachine = GameModel.createMachine({
         start: {
           target: GameStates.chooseWord,
           cond: canStartGame,
-          actions: GameModel.assign(startGame),
+          actions: [GameModel.assign(startRound), GameModel.assign(startGame)],
         },
       },
     },
     [GameStates.chooseWord]: {
+      entry: GameModel.assign(startRound),
       on: {
         chooseWord: {
           target: GameStates.guessing,
@@ -55,37 +65,70 @@ export const GameMachine = GameModel.createMachine({
       after: {
         10000: {
           target: GameStates.guessing,
-          actions: GameModel.assign(chooseWordRandomly),
+          actions: GameModel.assign(chooseWordRandomly) as Action<
+            GameContext,
+            any
+          >,
         },
       },
     },
     [GameStates.guessing]: {
       on: {
         drawLine: {
-          target: GameStates.guessing,
           cond: combineGuards(isCurrentPlayer, canDrawLine),
           actions: GameModel.assign(drawLine),
+        },
+        guessWord: [
+          {
+            cond: combineGuards(
+              reverseGuard(isCurrentPlayer),
+              reverseGuard(isRightWord)
+            ),
+            actions: GameModel.assign(guessWord),
+          },
+          {
+            target: GameStates.success,
+            cond: combineGuards(reverseGuard(isCurrentPlayer), isRightWord),
+            actions: [GameModel.assign(guessWord), GameModel.assign(addScore)],
+          },
+        ],
+      },
+      after: {
+        45000: {
+          target: GameStates.failure,
         },
       },
     },
     [GameStates.success]: {
-      on: {
-        continue: {
-          target: GameStates.guessing,
-        },
+      after: {
+        2000: [
+          {
+            target: GameStates.chooseWord,
+            cond: reverseGuard(hasWinner),
+            actions: GameModel.assign(startRound) as Action<GameContext, any>,
+          },
+          {
+            target: GameStates.end,
+            cond: hasWinner,
+          },
+        ],
       },
     },
     [GameStates.failure]: {
-      on: {
-        continue: {
-          target: GameStates.guessing,
-        },
+      after: {
+        2000: [
+          {
+            target: GameStates.chooseWord,
+          },
+        ],
       },
     },
     [GameStates.end]: {
       on: {
         retry: {
           target: GameStates.chooseWord,
+          actions: [GameModel.assign(resetScores)],
+          cond: canStartGame,
         },
       },
     },

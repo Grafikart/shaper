@@ -1,7 +1,8 @@
 import type { ReactNode } from "react";
 import { createContext, useContext, useEffect, useState } from "react";
 import { GameContext, GameEvent, GameEventEmitter } from "../types";
-import { GameStates } from "../machine/states";
+import { GameStates } from "../machine/GameStates";
+import ReconnectingWebSocket from "reconnecting-websocket";
 
 type SocketMessage =
   | {
@@ -24,6 +25,7 @@ type GameContextType = {
 const Context = createContext<GameContextType>({
   state: "lobby" as GameStates,
   context: {} as GameContext,
+  userId: "user",
   sendMessage: () => null,
 });
 
@@ -36,12 +38,14 @@ const userId = localStorage.getItem("userId");
 if (userId) {
   searchParams.set("userId", userId);
 }
-const socket = new WebSocket(
+const socket = new ReconnectingWebSocket(
   "ws://localhost:8000/ws?" + searchParams.toString()
 );
 const sendMessage: GameContextType["sendMessage"] = (data: GameEvent) => {
   socket.send(JSON.stringify(data));
 };
+
+socket.addEventListener("close", () => {});
 
 export function GameContextProvider({ children }: Props) {
   const [state, setState] = useState<Omit<GameContextType, "sendMessage">>({

@@ -5,6 +5,7 @@ import { WordSelector } from "./components/WordSelector";
 import { GameStates } from "../machine/GameStates";
 import { Drawing } from "./components/Drawing";
 import { Guessing } from "./components/Guessing";
+import { End } from "./components/End";
 
 type AppProps = {
   children: ReactNode;
@@ -24,6 +25,8 @@ export function App() {
       {state === GameStates.chooseWord && <WordSelector />}
       {state === GameStates.guessing &&
         (isMeCurrentPlayer ? <Drawing /> : <Guessing />)}
+      {state === GameStates.success && <p>Bravo quelqu'un a deviné le mot</p>}
+      {state === GameStates.end && <End />}
       <p>
         <strong>Etat :</strong> {state}
       </p>

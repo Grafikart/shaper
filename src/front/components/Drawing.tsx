@@ -7,6 +7,7 @@ import { GameModel } from "../../machine/GameModel";
 import { Lines } from "./Lines";
 import { pathForLine } from "../../func/svg";
 import { canDrawLine } from "../../machine/guards";
+import { Countdown } from "./Countdown";
 
 const DrawArea = {
   background: "white",
@@ -58,6 +59,7 @@ export function Drawing() {
 
   return (
     <div>
+      <Countdown limit={context.roundEndAt} />
       <p>
         A vous de dessiner ! <strong>{context.wordToGuess?.name}</strong>
       </p>

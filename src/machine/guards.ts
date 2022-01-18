@@ -36,6 +36,23 @@ export const canDrawLine = (context: GameContext) => {
   return context.lines.length < context.linesLimit;
 };
 
+export const isRightWord = (context: GameContext, event: { word: string }) => {
+  return context.wordToGuess?.name.toLowerCase() === event.word.toLowerCase();
+};
+
+export const hasWinner = (context: GameContext) => {
+  console.log(
+    "Testing hasWinner : ",
+    context.players.find((p) => p.score >= context.scoreLimit) !== undefined
+  );
+  return (
+    context.players.find((p) => p.score >= context.scoreLimit) !== undefined
+  );
+};
+
+/**
+ * Utilities
+ */
 export function combineGuards<E extends GameEvent["type"]>(
   ...conds: GameGuard<E>[]
 ): GameGuard<E> {
@@ -47,4 +64,8 @@ export function combineGuards<E extends GameEvent["type"]>(
     }
     return true;
   };
+}
+
+export function reverseGuard<E extends Function>(fn: E) {
+  return (...args: unknown[]) => !fn(...args);
 }

@@ -18,14 +18,16 @@ const previousMachineState = MachinePersister.retrieve();
 // On ne veut pas publier les choses tant que le service n'a pas reçu son contexte
 const serviceReady = { current: false };
 
-const gameService = interpret(GameMachine)
+const gameService = interpret(
+  GameMachine.withContext({
+    ...GameModel.initialContext,
+    ...previousMachineState.context,
+  })
+)
   .onTransition((state) => {
     if (!serviceReady.current) {
       return;
     }
-    console.log("State change");
-    console.log("====");
-    console.log(state.value, state.context);
     publishContext(state.value as GameStates, state.context, connections);
     MachinePersister.persist({
       state: state.value as GameStates,
@@ -34,12 +36,7 @@ const gameService = interpret(GameMachine)
   })
   .start(previousMachineState.state);
 
-gameService.state.context = {
-  ...gameService.state.context,
-  ...previousMachineState.context,
-};
-
-const fastify = Fastify({ logger: true });
+const fastify = Fastify({ logger: false });
 fastify.register(FastifyWS);
 fastify.register(FastifyStatic, {
   root: path.resolve("./public"),
@@ -52,7 +49,6 @@ fastify.get("/ws", { websocket: true }, (connection, req) => {
   const userId = query.userId ?? uuid();
   connections.set(userId, connection);
   gameService.send(GameModel.events.join(userId, Randanimal.randanimalSync()));
-  console.log("===========");
   connection.socket.send(
     JSON.stringify({
       type: "auth",
