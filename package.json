@@ -4,6 +4,9 @@
   "description": "",
   "main": "src/server/index.js",
   "type": "module",
+  "engines": {
+    "node": "17.x"
+  },
   "scripts": {
     "serve": "nodemon --ignore state.json src/server/index.ts",
     "servee": "tsnd --inspect  --respawn src/server/index.ts",
