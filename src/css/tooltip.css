@@ -1,0 +1,42 @@
+button[aria-label]:not(:disabled){
+  position: relative;
+}
+button[aria-label]:not(:disabled)::after{
+  pointer-events: none;
+  position: absolute;
+  bottom: calc(100% + 7px);
+  left: 50%;
+  transform: translate3d(-50%, 5px, 0);
+  opacity: 0;
+  content: attr(aria-label);
+  min-width: 100px;
+  width: max-content;
+  padding: 5px 8px;
+  color: #fff;
+  text-align: center;
+  background: rgba(0,0,0,0.85);
+  border-radius: 5px;
+}
+button[aria-label]:not(:disabled)::before {
+  position: absolute;
+  width: 0;
+  transform: translate3d(-50%, 5px, 0);
+  height: 0;
+  left: 50%;
+  bottom: calc(100% + 1px);
+  opacity: 0;
+  content: "";
+  border-style: solid;
+  border-width: 6px 6px 0 6px;
+  border-color: rgba(0,0,0,0.85) transparent transparent transparent;
+}
+button[aria-label]:not(:disabled)::after,
+button[aria-label]:not(:disabled)::before {
+  transition: .3s;
+}
+button[aria-label]:not(:disabled):hover::after,
+button[aria-label]:not(:disabled):hover::before
+{
+  opacity: 1;
+  transform: translate3d(-50%, 0, 0);
+}

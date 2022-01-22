@@ -1,0 +1,74 @@
+
+
+.btn {
+  background-color: var(--green);
+  color: #FFF;
+  height: 54px;
+  border-radius: 30px 40px 30px 20px;
+  padding: 0 1em;
+  transition: .3s;
+  border: 3px solid var(--green);
+  overflow: hidden;
+  background-image: linear-gradient(-45deg, transparent 25%, rgba(0, 0, 0, 0.1) 25%, rgba(0, 0, 0, 0.1) 50%, transparent 50%, transparent 75%, rgba(0, 0, 0, 0.1) 75%, rgba(0, 0, 0, 0.1) 100%);
+  background-size: 20px 20px;
+  animation: stripe 10s linear infinite;
+}
+
+.btn::before {
+  content:'';
+  position: absolute;
+  inset: 0;
+  background-color: var(--green);
+  opacity: 1;
+  transition: opacity .3s;
+}
+
+.btn:hover {
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.btn:hover::before{
+  opacity: 0;
+}
+
+.btn span {
+  position: relative;
+  z-index: 2;
+}
+
+.btn-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  flex: none;
+  margin: -7px;
+  border-radius: 50%;
+  transition: background .3s, color .3s;
+  transform: translateY(-1px);
+  color: var(--brown-light)
+}
+
+.btn-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.btn-icon:not(:disabled):hover{
+  background: var(--yellow);
+  color: var(--brown)
+}
+
+.btn-icon:disabled {
+  opacity: .3;
+}
+
+@keyframes stripe {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 100% 0;
+  }
+}

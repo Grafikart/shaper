@@ -17,6 +17,12 @@
 
 ## Historique
 
+### 22/01/2022, 3h30
+
+- Intégration de la maquette pour l'écran de devinage
+- Création de quelques composants génériques (bouton, bouton avec icone...)
+- Système de ban utilisateur
+
 ### 18/01/2022, 3h00
 
 - Formulaire pour entrer les mots

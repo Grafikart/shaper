@@ -1,0 +1,25 @@
+.card {
+  position: relative;
+  background-color: var(--beige);
+  border-radius: 35px 29px 26px 20px;
+  box-shadow: 14px 19px 0 rgba(0, 0, 0, 0.04);
+}
+
+.card__title {
+  left: -.5em;
+  display: flex;
+  width: max-content;
+  margin-top: -30px;
+  margin-left: -.5em;
+  margin-bottom: 1em;
+  height: 40px;
+  background-color: var(--yellow);
+  border-radius: 40px;
+  padding: 0 1em;
+  color: var(--blue);
+  align-items: center;
+}
+
+.card.padded {
+  padding: 1em 1.5em;
+}

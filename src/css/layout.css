@@ -1,0 +1,41 @@
+.flex {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--gap, 0) * 1rem);
+}
+
+.layout-guess {
+  display: grid;
+  align-items: flex-start;
+  align-content: flex-start;
+  grid-gap: 1.5rem;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas:
+          "canvas canvas"
+          "input input"
+          "guesses scoreboard";
+}
+
+
+@media screen and (min-width: 700px) {
+  .layout-guess {
+    grid-template-columns: 1fr 250px;
+    grid-template-areas:
+          "canvas guesses"
+          "canvas scoreboard"
+          "input input"
+  ;
+  }
+}
+
+@media screen and (min-width: 900px) {
+  .layout-guess {
+    grid-template-columns: 1fr 350px;
+    grid-template-areas:
+            "canvas input"
+            "canvas guesses"
+            "canvas scoreboard"
+            "canvas empty";
+  }
+
+}

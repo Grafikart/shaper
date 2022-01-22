@@ -2,6 +2,7 @@ import type { GameAction, GameContext } from "../types";
 import { words } from "../server/config";
 import { shuffle } from "../func/array";
 import { Simulate } from "react-dom/test-utils";
+import contextMenu = Simulate.contextMenu;
 
 export const addPlayer: GameAction<"join"> = (context, event) => ({
   players: [
@@ -85,4 +86,8 @@ export const startRound = (context: GameContext) => {
 
 export const resetScores = (context: GameContext) => ({
   players: context.players.map((p) => ({ ...p, score: 0 })),
+});
+
+export const ban: GameAction<"ban"> = (context, event) => ({
+  players: context.players.filter((p) => p.id !== event.banId),
 });

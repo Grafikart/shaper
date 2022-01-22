@@ -1,6 +1,8 @@
 import { GameModel } from "./GameModel";
 import { GameStates } from "./GameStates";
 import {
+  bannedPlayerIsPlaying,
+  canBan,
   canChooseWord,
   canDrawLine,
   canJoinGame,
@@ -15,6 +17,7 @@ import {
 import {
   addPlayer,
   addScore,
+  ban,
   chooseWord,
   chooseWordRandomly,
   drawLine,
@@ -92,11 +95,22 @@ export const GameMachine = GameModel.createMachine({
             actions: [GameModel.assign(guessWord), GameModel.assign(addScore)],
           },
         ],
+        ban: [
+          {
+            cond: combineGuards(bannedPlayerIsPlaying, canBan),
+            target: GameStates.chooseWord,
+            actions: GameModel.assign(ban),
+          },
+          {
+            cond: combineGuards(canBan),
+            actions: GameModel.assign(ban),
+          },
+        ],
       },
       after: {
-        45000: {
-          target: GameStates.failure,
-        },
+        // 45000: {
+        //   target: GameStates.failure,
+        // },
       },
     },
     [GameStates.success]: {
@@ -105,7 +119,6 @@ export const GameMachine = GameModel.createMachine({
           {
             target: GameStates.chooseWord,
             cond: reverseGuard(hasWinner),
-            actions: GameModel.assign(startRound) as Action<GameContext, any>,
           },
           {
             target: GameStates.end,

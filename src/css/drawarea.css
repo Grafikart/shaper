@@ -1,0 +1,26 @@
+.drawarea {
+  grid-area: canvas;
+  padding: 1rem;
+}
+
+.drawarea__header {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 .5em .5em .5em;
+  font-size: 1.1em;
+}
+
+.drawarea__canvas {
+  border-radius: 30px;
+  background-color: #fff;
+  box-shadow: inset 2px 4px 0px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.07);
+}
+
+.animatedLine {
+  animation: .3s drawLine both;
+}
+
+@keyframes drawLine {
+  to {stroke-dashoffset: 0}
+}

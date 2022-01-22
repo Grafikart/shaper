@@ -34,6 +34,10 @@ export const GameModel = createModel(
       }),
       guessWord: (playerId: Player["id"], word: string) => ({ word, playerId }),
       retry: (playerId: Player["id"]) => ({ playerId }),
+      ban: (playerId: Player["id"], banId: Player["id"]) => ({
+        playerId,
+        banId,
+      }),
     },
   }
 );

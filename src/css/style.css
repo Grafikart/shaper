@@ -1,7 +1,31 @@
-.animatedLine {
-  animation: .3s drawLine both;
+@import './reset.css';
+@import './card.css';
+@import './list.css';
+@import './typography.css';
+@import './drawarea.css';
+@import './layout.css';
+@import './form.css';
+@import './btn.css';
+@import './scrollbar.css';
+@import './tooltip.css';
+
+:root {
+  --beige: #FFFAE6;
+  --brown-light: #D89348;
+  --green: #35B0A3;
+  --gold: #BBA649;
+  --brown: #7A673F;
+  --blue: #09AFCE;
+  --yellow: #FCE04E;
 }
 
-@keyframes drawLine {
-  to {stroke-dashoffset: 0}
+html, body {
+  font-size: 18px;
+  color: var(--brown);
+  font-weight: bold;
+}
+
+body {
+  background: url(/img/food.png) repeat;
+  font-family: "Nunito", sans-serif;
 }

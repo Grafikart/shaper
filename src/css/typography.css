@@ -1,0 +1,25 @@
+.playername {
+  color: var(--blue);
+  font-weight: 600;
+}
+
+mark {
+  display: inline-block;
+  transform: translateY(-2px);
+  background: none;
+  color: var(--blue);
+  position: relative;
+}
+
+mark::after {
+  content: '';
+  z-index: -1;
+  border-radius: 10px;
+  position: absolute;
+  bottom: 2px;
+  left: 0;
+  right: 0;
+  height: 10px;
+  background-color: var(--yellow);
+  width: 100%;
+}

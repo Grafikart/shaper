@@ -7,6 +7,10 @@ export const isCurrentPlayer = (
   return context.currentPlayer?.id === event.playerId;
 };
 
+const isHost = (context: GameContext, playerId: string) => {
+  return context.players[0].id === playerId;
+};
+
 export const canJoinGame: GameGuard<"join"> = (context: GameContext, event) => {
   return context.players.find((p) => p.id === event.playerId) === undefined;
 };
@@ -21,7 +25,7 @@ export const canStartGame = (
 ) => {
   return (
     context.players.filter((p) => p.ready).length > 3 &&
-    context.players[0].id === event.playerId
+    isHost(context, event.playerId)
   );
 };
 
@@ -41,13 +45,24 @@ export const isRightWord = (context: GameContext, event: { word: string }) => {
 };
 
 export const hasWinner = (context: GameContext) => {
-  console.log(
-    "Testing hasWinner : ",
-    context.players.find((p) => p.score >= context.scoreLimit) !== undefined
-  );
   return (
     context.players.find((p) => p.score >= context.scoreLimit) !== undefined
   );
+};
+
+export const canBan: GameGuard<"ban"> = (context, event) => {
+  return (
+    isHost(context, event.playerId) &&
+    !isCurrentPlayer(context, event) &&
+    event.playerId !== event.banId
+  );
+};
+
+export const bannedPlayerIsPlaying = (
+  context: GameContext,
+  event: { banId: string }
+) => {
+  return context.currentPlayer?.id === event.banId;
 };
 
 /**

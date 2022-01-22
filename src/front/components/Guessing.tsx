@@ -1,8 +1,11 @@
 import { useGameContext } from "../GameContextProvider";
 import { Lines } from "./Lines";
 import { GameModel } from "../../machine/GameModel";
-import { FormEventHandler, useState } from "react";
+import { FormEventHandler } from "react";
 import { Countdown } from "./Countdown";
+import { Scoreboard } from "./Scoreboard";
+import { GuessForm } from "./GuessForm";
+import { Guesses } from "./Guesses";
 
 const DrawArea = {
   background: "white",
@@ -28,34 +31,25 @@ export function Guessing() {
 
   return (
     <>
-      <Countdown limit={context.roundEndAt} />
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 300px",
-          minHeight: 500,
-        }}
-      >
-        <div style={DrawArea}>
-          <svg viewBox="0 0 1 1" style={{ pointerEvents: "none" }}>
-            <Lines lines={context.lines} />
-          </svg>
+      <div className="layout-guess">
+        <div className="drawarea card">
+          <div className="drawarea__header">
+            <div>
+              C'est <mark>{context.currentPlayer?.name}</mark> qui dessine
+            </div>
+            <div>
+              <Countdown limit={context.roundEndAt} />
+            </div>
+          </div>
+          <div className="drawarea__canvas">
+            <svg viewBox="0 0 1 1" style={{ pointerEvents: "none" }}>
+              <Lines lines={context.lines} />
+            </svg>
+          </div>
         </div>
-        <div>
-          <form action="" onSubmit={handleSubmit}>
-            <input
-              name="word"
-              type="text"
-              placeholder="Que représente le dessin"
-            />
-            <button>Deviner</button>
-          </form>
-          <ul>
-            {context.guesses.map((guess) => (
-              <li key={guess}>{guess}</li>
-            ))}
-          </ul>
-        </div>
+        <GuessForm onSubmit={handleSubmit} />
+        <Guesses />
+        <Scoreboard />
       </div>
     </>
   );

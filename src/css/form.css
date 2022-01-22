@@ -1,0 +1,27 @@
+.guess-form {
+  --padding: .5em;
+  padding: var(--padding);
+  border-radius: 62.5px 29px 35px 45px;
+}
+
+.guess-form input {
+  width: 100%;
+  background: #FFFFFF;
+  border: 2px solid rgba(0, 0, 0, 0.04);
+  box-sizing: border-box;
+  box-shadow: inset 2px 4px 0 rgba(0, 0, 0, 0.04);
+  border-radius: 62.5px 29px 45px 45px;
+  height: 54px;
+  padding-left: 1.5em;
+  padding-right: 100px;
+}
+
+.guess-form .btn {
+  position: absolute;
+  top: var(--padding);
+  right: var(--padding);
+}
+
+.guess-form input::placeholder {
+  color: var(--gold);
+}
