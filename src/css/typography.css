@@ -7,6 +7,10 @@
   color: var(--brown-light);
 }
 
+.text-danger {
+  color: var(--red);
+}
+
 mark {
   display: inline-block;
   transform: translateY(-2px);

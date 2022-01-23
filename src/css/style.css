@@ -8,6 +8,7 @@
 @import './btn.css';
 @import './scrollbar.css';
 @import './tooltip.css';
+@import './countdown.css';
 
 :root {
   --beige: #FFFAE6;
@@ -17,6 +18,7 @@
   --brown: #7A673F;
   --blue: #09AFCE;
   --yellow: #FCE04E;
+  --red: #E14F13;
 }
 
 html, body {

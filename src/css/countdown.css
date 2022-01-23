@@ -1,0 +1,24 @@
+.countdown svg {
+  animation: clockSlow 2s infinite;
+  transform-origin: 50% 100%;
+}
+
+.countdown--danger {
+  color: var(--red);
+}
+
+.countdown--danger svg {
+  animation: clockFast .5s infinite;
+}
+
+@keyframes clockSlow {
+  from { transform: rotate(5deg) }
+  50% { transform: rotate(-5deg) }
+  to { transform: rotate(5deg) }
+}
+
+@keyframes clockFast {
+  from { transform: rotate(10deg) }
+  50% { transform: rotate(-10deg) }
+  to { transform: rotate(10deg) }
+}

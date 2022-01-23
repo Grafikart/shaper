@@ -8,6 +8,7 @@ specifiers:
   '@types/ws': ^8.2.2
   '@vitejs/plugin-react': ^1.0.7
   clipboardy: ^3.0.0
+  clsx: ^1.1.1
   concurrently: ^7.0.0
   esmo: ^0.14.0
   fastify: ^3.25.3
@@ -30,6 +31,7 @@ specifiers:
 
 dependencies:
   clipboardy: 3.0.0
+  clsx: 1.1.1
   fastify: 3.25.3
   fastify-static: 4.5.0
   fastify-websocket: 4.0.0
@@ -1704,6 +1706,11 @@ packages:
     dependencies:
       mimic-response: 1.0.1
     dev: true
+
+  /clsx/1.1.1:
+    resolution: {integrity: sha512-6/bPho624p3S2pMyvP5kKBPXnI3ufHLObBFCfgx+LkeR5lg2XYy2hqZqUf45ypD8COn2bhgGJSUE+l5dhNBieA==}
+    engines: {node: '>=6'}
+    dev: false
 
   /co-wait/0.0.0:
     resolution: {integrity: sha1-wiNyAyIY7b9u2RXkM1RsIeRFYos=}

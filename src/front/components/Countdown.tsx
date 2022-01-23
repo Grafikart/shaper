@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { ClockIcon } from "./ui/Icons";
+import clsx from "clsx";
 
 type CountdownProps = {
   limit: number;
@@ -15,11 +16,18 @@ export function Countdown({ limit }: CountdownProps) {
     };
   }, []);
 
+  const secondsLeft = Math.ceil((limit - Date.now()) / 1000);
+
   return (
-    <div className="flex">
+    <div
+      className={clsx(
+        "flex countdown",
+        secondsLeft < 10 && " countdown--danger"
+      )}
+    >
       <ClockIcon size={23} />
       &nbsp;
-      {Math.ceil((limit - Date.now()) / 1000)}s
+      {secondsLeft}s
     </div>
   );
 }
