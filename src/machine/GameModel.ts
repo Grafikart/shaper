@@ -1,5 +1,5 @@
 import { createModel } from "xstate/lib/model";
-import { Line, Player, Point, Word } from "../types";
+import { Guess, Line, Player, Point, Word } from "../types";
 
 export const GameModel = createModel(
   {
@@ -11,7 +11,7 @@ export const GameModel = createModel(
     currentPlayer: null as Player | null,
     availableWords: [] as Word[],
     wordToGuess: null as Word | null,
-    guesses: [] as string[],
+    guesses: [] as Guess[],
     scoreLimit: 10,
     roundEndAt: 0,
   },

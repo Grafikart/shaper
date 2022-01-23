@@ -7,15 +7,6 @@ import { Scoreboard } from "./Scoreboard";
 import { GuessForm } from "./GuessForm";
 import { Guesses } from "./Guesses";
 
-const DrawArea = {
-  background: "white",
-  borderRadius: "3px",
-  maxWidth: "80vw",
-  maxHeight: "80vh",
-  aspectRatio: "1/1",
-  margin: "0 auto",
-};
-
 export function Guessing() {
   const { context, sendMessage, userId } = useGameContext();
 
@@ -30,16 +21,14 @@ export function Guessing() {
   };
 
   return (
-    <>
-      <div className="layout-guess">
+    <div className="container">
+      <div className="layout-draw">
         <div className="drawarea card">
           <div className="drawarea__header">
             <div>
               C'est <mark>{context.currentPlayer?.name}</mark> qui dessine
             </div>
-            <div>
-              <Countdown limit={context.roundEndAt} />
-            </div>
+            <Countdown limit={context.roundEndAt} />
           </div>
           <div className="drawarea__canvas">
             <svg viewBox="0 0 1 1" style={{ pointerEvents: "none" }}>
@@ -51,6 +40,6 @@ export function Guessing() {
         <Guesses />
         <Scoreboard />
       </div>
-    </>
+    </div>
   );
 }

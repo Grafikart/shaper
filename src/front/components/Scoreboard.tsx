@@ -9,12 +9,13 @@ import { canBan } from "../../machine/guards";
 
 export function Scoreboard() {
   const { context, sendMessage, userId } = useGameContext();
+  const sortedPlayers = [...context.players].sort((a, b) => b.score - a.score);
 
   return (
     <div className="card padded" style={{ gridArea: "scoreboard" }}>
       <div className="card__title">Scoreboard</div>
       <ul className="list">
-        {context.players.map((p) => (
+        {sortedPlayers.map((p) => (
           <ScoreboardItem
             key={p.id}
             player={p}

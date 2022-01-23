@@ -3,6 +3,10 @@
   font-weight: 600;
 }
 
+.word {
+  color: var(--brown-light);
+}
+
 mark {
   display: inline-block;
   transform: translateY(-2px);

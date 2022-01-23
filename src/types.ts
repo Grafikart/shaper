@@ -13,6 +13,11 @@ export type Player = {
   score: number;
 };
 
+export type Guess = {
+  word: string,
+  playerId: Player['id'],
+}
+
 export type Line = {
   start: Point;
   end: Point;

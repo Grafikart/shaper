@@ -11,10 +11,21 @@
 }
 
 .drawarea__canvas {
+  position: relative;
   border-radius: 30px;
   background-color: #fff;
   box-shadow: inset 2px 4px 0px rgba(0, 0, 0, 0.04);
   border: 1px solid rgba(0, 0, 0, 0.07);
+  user-select: none;
+}
+
+.drawarea__linecount {
+  position: absolute;
+  top: .5em;
+  right: 1em;
+  pointer-events: none;
+  font-weight: 600;
+  font-size: 0.9em;
 }
 
 .animatedLine {

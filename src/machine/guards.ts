@@ -1,4 +1,5 @@
 import type { GameAction, GameContext, GameEvent, GameGuard } from "../types";
+import { wordProximity } from "../func/string";
 
 export const isCurrentPlayer = (
   context: GameContext,
@@ -24,7 +25,7 @@ export const canStartGame = (
   event: { playerId: string }
 ) => {
   return (
-    context.players.filter((p) => p.ready).length > 3 &&
+    context.players.filter((p) => p.ready).length >= 3 &&
     isHost(context, event.playerId)
   );
 };
@@ -41,7 +42,7 @@ export const canDrawLine = (context: GameContext) => {
 };
 
 export const isRightWord = (context: GameContext, event: { word: string }) => {
-  return context.wordToGuess?.name.toLowerCase() === event.word.toLowerCase();
+  return wordProximity(context.wordToGuess?.name || "", event.word) <= 2;
 };
 
 export const hasWinner = (context: GameContext) => {

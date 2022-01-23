@@ -261,7 +261,7 @@ export const words = {
     "éclipse",
     "stade",
     "Harry Potter",
-    "clin d'œil",
+    "clin d'oeil",
     "médecin",
     "capuche",
     "minceur",

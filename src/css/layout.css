@@ -1,10 +1,17 @@
+.container {
+  padding: 2em;
+  margin: 0 auto;
+  max-width: 1250px;
+}
+
 .flex {
   display: flex;
   align-items: center;
   gap: calc(var(--gap, 0) * 1rem);
 }
 
-.layout-guess {
+.layout-guess,
+.layout-draw {
   display: grid;
   align-items: flex-start;
   align-content: flex-start;
@@ -17,8 +24,16 @@
 }
 
 
+.layout-draw {
+  grid-template-areas:
+          "canvas canvas"
+          "guesses scoreboard";
+}
+
+
 @media screen and (min-width: 700px) {
-  .layout-guess {
+  .layout-guess,
+  .layout-draw {
     grid-template-columns: 1fr 250px;
     grid-template-areas:
           "canvas guesses"
@@ -26,13 +41,26 @@
           "input input"
   ;
   }
+
+  .layout-draw {
+    grid-template-areas:
+          "canvas guesses"
+          "canvas scoreboard"
+  }
 }
 
 @media screen and (min-width: 900px) {
-  .layout-guess {
+  .layout-guess,
+  .layout-draw {
     grid-template-columns: 1fr 350px;
     grid-template-areas:
             "canvas input"
+            "canvas guesses"
+            "canvas scoreboard"
+            "canvas empty";
+  }
+  .layout-guess {
+    grid-template-areas:
             "canvas guesses"
             "canvas scoreboard"
             "canvas empty";

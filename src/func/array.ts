@@ -22,3 +22,21 @@ function random(seed: number) {
   const x = Math.sin(seed++) * 10000;
   return x - Math.floor(x);
 }
+
+export function keyBy<T extends Record<string, unknown>>(
+  items: T[],
+  key: keyof T
+): Record<string, T> {
+  return items.reduce((acc, item) => {
+    const value = item[key];
+    if (!(typeof value === "string")) {
+      throw new Error(
+        `${key} ne peut être utilisé comme clef, la valeur n'est pas une chaine)`
+      );
+    }
+    return {
+      ...acc,
+      [value]: item,
+    };
+  }, {});
+}
