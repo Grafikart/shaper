@@ -11,7 +11,9 @@
     "dev": "concurrently \"npm:start:watch\" \"vite\"",
     "start:watch": "nodemon --ignore state.json src/server/index.ts",
     "start": "npx esmo ./src/server/index.ts",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "vitest",
+    "test:watch": "vitest watch",
+    "coverage": "vitest --coverage",
     "build": "tsc && vite build",
     "lint": "tsc",
     "preview": "vite preview",
@@ -39,7 +41,8 @@
     "prettier": "^2.5.1",
     "ts-node": "^10.4.0",
     "typescript": "^4.5.4",
-    "vite": "^2.7.2"
+    "vite": "^2.7.2",
+    "vitest": "^0.1.27"
   },
   "dependencies": {
     "clipboardy": "^3.0.0",
