@@ -16,7 +16,7 @@ export function Countdown({ limit }: CountdownProps) {
     };
   }, []);
 
-  const secondsLeft = Math.ceil((limit - Date.now()) / 1000);
+  const secondsLeft = Math.max(0, Math.ceil((limit - Date.now()) / 1000));
 
   return (
     <div

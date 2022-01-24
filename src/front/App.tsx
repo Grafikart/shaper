@@ -6,6 +6,7 @@ import { GameStates } from "../machine/GameStates";
 import { Drawing } from "./components/Drawing";
 import { Guessing } from "./components/Guessing";
 import { End } from "./components/End";
+import { Success } from "./components/Success";
 
 type AppProps = {
   children: ReactNode;
@@ -23,9 +24,9 @@ export function App() {
       {me && <h2>{me.name}</h2>}
       {state === GameStates.lobby && <Lobby />}
       {state === GameStates.chooseWord && <WordSelector />}
-      {state === GameStates.guessing &&
+      {[GameStates.guessing, GameStates.success].includes(state) &&
         (isMeCurrentPlayer ? <Drawing /> : <Guessing />)}
-      {state === GameStates.success && <p>Bravo quelqu'un a deviné le mot</p>}
+      {state === GameStates.success && <Success />}
       {state === GameStates.end && <End />}
       <p>
         <strong>Etat :</strong> {state}

@@ -9,6 +9,7 @@
 @import './scrollbar.css';
 @import './tooltip.css';
 @import './countdown.css';
+@import './modal.css';
 
 :root {
   --beige: #FFFAE6;

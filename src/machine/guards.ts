@@ -25,7 +25,7 @@ export const canStartGame = (
   event: { playerId: string }
 ) => {
   return (
-    context.players.filter((p) => p.ready).length >= 3 &&
+    context.players.filter((p) => p.ready).length >= 2 &&
     isHost(context, event.playerId)
   );
 };
