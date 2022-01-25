@@ -69,6 +69,7 @@ textarea {
 button {
   cursor: pointer;
 }
+
 button:disabled {
   cursor: inherit;
 }

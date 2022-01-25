@@ -1,6 +1,10 @@
 import { useGameContext } from "../GameContextProvider";
 import { GameModel } from "../../machine/GameModel";
 import { canStartGame } from "../../machine/guards";
+import { Modal } from "./ui/Modal";
+import { Button } from "./ui/Button";
+import { useEffect } from "react";
+import confetti from "canvas-confetti";
 
 export function End() {
   const { context, sendMessage, userId } = useGameContext();
@@ -14,19 +18,41 @@ export function End() {
     sendMessage(retryEvent);
   };
 
+  useEffect(() => {
+    const y = window.innerHeight / 2;
+    console.log(y);
+    confetti({
+      particleCount: 100,
+      zIndex: 3000,
+      spread: 90,
+      disableForReducedMotion: true,
+      colors: [
+        "#FFFAE6",
+        "#D89348",
+        "#35B0A3",
+        "#BBA649",
+        "#7A673F",
+        "#09AFCE",
+        "#FCE04E",
+        "#E14F13",
+      ],
+    });
+  }, []);
+
   return (
-    <div>
-      <p>
-        <strong>{winner.name}</strong> a gagné !!
+    <Modal>
+      <p className="mb-1">
+        Bravo ! <mark>{winner.name}</mark> a gagné !!
       </p>
       <p>
-        <button
+        <Button
+          className="btn"
           onClick={handleReset}
           disabled={!canStartGame(context, retryEvent)}
         >
           Relancer la partie
-        </button>
+        </Button>
       </p>
-    </div>
+    </Modal>
   );
 }

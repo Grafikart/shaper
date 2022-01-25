@@ -6,6 +6,7 @@ import { Countdown } from "./Countdown";
 import { Scoreboard } from "./Scoreboard";
 import { GuessForm } from "./GuessForm";
 import { Guesses } from "./Guesses";
+import clsx from "clsx";
 
 export function Guessing() {
   const { context, sendMessage, userId } = useGameContext();
@@ -22,7 +23,12 @@ export function Guessing() {
 
   return (
     <div className="container">
-      <div className="layout-draw">
+      <div
+        className={clsx(
+          "layout-guess",
+          context.guesses.length == 0 && "layout-guess--no-guess"
+        )}
+      >
         <div className="drawarea card">
           <div className="drawarea__header">
             <div>

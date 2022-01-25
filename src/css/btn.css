@@ -1,26 +1,34 @@
 
 
 .btn {
-  background-color: var(--green);
+  --color: var(--green);
+  position: relative;
+  background-color: var(--color);
   color: #FFF;
   height: 54px;
-  border-radius: 30px 40px 30px 20px;
+  border-radius: 20px;
   padding: 0 1em;
   transition: .3s;
-  border: 3px solid var(--green);
+  border: 3px solid var(--color);
   overflow: hidden;
   background-image: linear-gradient(-45deg, transparent 25%, rgba(0, 0, 0, 0.1) 25%, rgba(0, 0, 0, 0.1) 50%, transparent 50%, transparent 75%, rgba(0, 0, 0, 0.1) 75%, rgba(0, 0, 0, 0.1) 100%);
   background-size: 20px 20px;
   animation: stripe 10s linear infinite;
 }
 
+.btn:disabled {
+  pointer-events: none;
+  --color: #c9c9c9;
+}
+
 .btn::before {
   content:'';
   position: absolute;
   inset: 0;
-  background-color: var(--green);
+  background-color: var(--color);
   opacity: 1;
   transition: opacity .3s;
+  z-index: 1;
 }
 
 .btn:hover {

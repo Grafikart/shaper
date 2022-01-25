@@ -10,6 +10,30 @@
   gap: calc(var(--gap, 0) * 1rem);
 }
 
+.stack {
+  --gap: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.stack.center {
+  align-items: center;
+}
+
+.stack > * + * {
+  margin-top: calc(var(--gap, 0.5) * 1rem);
+}
+
+.mb-1 {
+  margin-bottom: 1em;
+}
+
+.layout-base {
+  display: grid;
+  grid-gap: 1.5rem;
+  grid-template-columns: 1fr;
+}
+
 .layout-guess,
 .layout-draw {
   display: grid;
@@ -20,7 +44,7 @@
   grid-template-areas:
           "canvas canvas"
           "input input"
-          "guesses scoreboard";
+          "scoreboard guesses";
 }
 
 
@@ -36,16 +60,28 @@
   .layout-draw {
     grid-template-columns: 1fr 250px;
     grid-template-areas:
+          "input input"
           "canvas guesses"
           "canvas scoreboard"
-          "input input"
+          "canvas empty"
   ;
+  }
+
+  .layout-guess--no-guess {
+    grid-template-areas:
+          "input input"
+          "canvas scoreboard"
+          "canvas empty";
+  }
+
+  .layout-base {
+    grid-template-columns: 1fr 350px;
   }
 
   .layout-draw {
     grid-template-areas:
-          "canvas guesses"
           "canvas scoreboard"
+          "canvas guesses"
   }
 }
 
@@ -55,15 +91,22 @@
     grid-template-columns: 1fr 350px;
     grid-template-areas:
             "canvas input"
-            "canvas guesses"
             "canvas scoreboard"
+            "canvas guesses"
             "canvas empty";
   }
-  .layout-guess {
+  .layout-draw {
     grid-template-areas:
-            "canvas guesses"
             "canvas scoreboard"
+            "canvas guesses"
             "canvas empty";
+  }
+
+  .layout-guess--no-guess {
+    grid-template-areas:
+          "canvas input"
+          "canvas scoreboard"
+          "canvas empty";
   }
 
 }

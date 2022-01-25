@@ -11,6 +11,7 @@ import { Countdown } from "./Countdown";
 import { GuessForm } from "./GuessForm";
 import { Guesses } from "./Guesses";
 import { Scoreboard } from "./Scoreboard";
+import { distance } from "../../func/geometry";
 
 const precision = 6;
 
@@ -52,7 +53,10 @@ export function Drawing() {
       return;
     }
     const end = pointForEvent(e, drawAreaRef.current!);
-    sendMessage(GameModel.events.drawLine(userId, startRef.current, end));
+    // We don't want user to send missclicked lines
+    if (distance(startRef.current, end) > 0.01) {
+      sendMessage(GameModel.events.drawLine(userId, startRef.current, end));
+    }
     setStart(null);
     setEnd(null);
   };

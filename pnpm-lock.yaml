@@ -7,6 +7,7 @@ specifiers:
   '@types/uuid': ^8.3.4
   '@types/ws': ^8.2.2
   '@vitejs/plugin-react': ^1.0.7
+  canvas-confetti: ^1.4.0
   clipboardy: ^3.0.0
   clsx: ^1.1.1
   concurrently: ^7.0.0
@@ -30,6 +31,7 @@ specifiers:
   xstate: 4.27.0
 
 dependencies:
+  canvas-confetti: 1.4.0
   clipboardy: 3.0.0
   clsx: 1.1.1
   fastify: 3.25.3
@@ -1493,6 +1495,10 @@ packages:
   /caniuse-lite/1.0.30001299:
     resolution: {integrity: sha512-iujN4+x7QzqA2NCSrS5VUy+4gLmRd4xv6vbBBsmfVqTx8bLAD8097euLqQgKxSVLvxjSDcvF1T/i9ocgnUFexw==}
     dev: true
+
+  /canvas-confetti/1.4.0:
+    resolution: {integrity: sha512-S18o4Y9PqI/uabdlT/jI3MY7XBJjNxnfapFIkjkMwpz6qNxLFZOm2b22OMf4ZYDL9lpNWI+Ih4fEMVPwO1KHFQ==}
+    dev: false
 
   /cardinal/2.1.1:
     resolution: {integrity: sha1-fMEFXYItISlU0HsIXeolHMe8VQU=}

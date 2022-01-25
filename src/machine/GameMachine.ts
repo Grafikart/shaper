@@ -108,9 +108,9 @@ export const GameMachine = GameModel.createMachine({
         ],
       },
       after: {
-        // 45000: {
-        //   target: GameStates.failure,
-        // },
+        45000: {
+          target: GameStates.failure,
+        },
       },
     },
     [GameStates.success]: {

@@ -4,11 +4,25 @@
 }
 
 .word {
+  text-transform: capitalize;
   color: var(--brown-light);
+}
+
+.text-success {
+  color: var(--green);
+}
+
+.text-muted {
+  color: var(--brown-light);
+  opacity: .5;
 }
 
 .text-danger {
   color: var(--red);
+}
+
+.text-center {
+  text-align: center;
 }
 
 mark {

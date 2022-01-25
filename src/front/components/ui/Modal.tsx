@@ -1,13 +1,15 @@
 import type { ReactNode } from "react";
+import clsx from "clsx";
 
 type ModalProps = {
   children: ReactNode;
+  error?: boolean;
 };
 
-export function Modal({ children }: ModalProps) {
+export function Modal({ children, error }: ModalProps) {
   return (
     <div className="modal-wrapper">
-      <div className="modal">
+      <div className={clsx("modal", error && "modal--error")}>
         <div className="modal__body">{children}</div>
         <svg
           className="modal__shape"

@@ -5,7 +5,7 @@
   display: flex;
   place-items: center;
   place-content: center;
-  backdrop-filter: blur(4px);
+  /* backdrop-filter: blur(4px); */
   z-index: 10;
   animation: modalOverlayIn .3s;
 }
@@ -13,7 +13,7 @@
 .modal {
   position: fixed;
   min-width: max-content;
-  width: 800px;
+  width: 600px;
   max-width: calc(100vw - 4em);
   text-align: center;
   padding: 2rem;
@@ -46,6 +46,10 @@
   height: 100%;
   color: var(--beige);
   filter: drop-shadow(14px 19px 0 rgba(0, 0, 0, 0.04));
+}
+
+.modal--error .modal__shape {
+  color: var(--red-light);
 }
 
 @keyframes splash {
