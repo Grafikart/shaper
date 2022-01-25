@@ -11,7 +11,7 @@
     "dev": "concurrently \"npm:start:watch\" \"vite\"",
     "start:watch": "nodemon --ignore state.json src/server/index.ts",
     "start": "npx esmo ./src/server/index.ts",
-    "test": "vitest",
+    "test": "vitest run",
     "test:watch": "vitest watch",
     "coverage": "vitest --coverage",
     "build": "tsc && vite build",
