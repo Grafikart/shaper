@@ -1,37 +1,22 @@
-# Système de rooms
-
-- Système en NodeJS pour signer des données (id en session)
-- Premier panneau pour entrer un pseudo ET lancer une partie
-- Comment on nettoie les partie ? 
-  - Une partie finie est détruite
-  - Limiter à 100 partie
-  - Si le joueur est déjà dans une partie, lorsqu'il en recrée une il supprime l'ancienne
-  - Une partie qui est sans joueur est supprimée
-  - ??? Une partie qui a commencée depuis plus de 30 minutes est supprimée
-
-- Quand un utilisateur arrive avec un lien ?gameId=12312321
-  - On lui demande son pseudo (sauf si il a un pseudo dans l'url)
-  - On le connecte au websocket
-  - On lui fait rejoindre la partie 
-  - Tout le monde est content
-
-
 ## TODO
 
-- Mettre en place le choix du pseudo pour les joueurs
-- Système de reconnection ? (signer l'ID)
+- Signer l'ID
+- Ban dès le lobby
+- Limiter la taille des pseudos
+- Inverser scoreboard & devinage (limiter la hauteur)
+- Joueur déconnecté avec une couleur
+- Ne pas permettre 2 fois le même mot
+- Afficher un message en cas de kick
+- Limiter les devinages dans le temps (5 secondes)
 - Auto focus du champs pour entrer un mot
-- Afficher le dessin et le mot deviné en cas de succès
-- Afficher le dessin et le mot à faire deviner en cas d'échec
-- Système de kick pour l'administrateur
-- Afficher le nom devant la personne qui a déviné
 - Mode spectateur qui peut ajouter des mots
-- Scoreboard
-- Ne pas prendre en compte les caractères spéciaux (éàç)
 - Interaction twitch
   - Le tchat rajoute des mots
   - Système à un joueur avec tchat qui devine (connecté au tchat ?)
-- Imaginer un design
+- Supprimer le dernier trait avec un CTRL+Z
+- Kick après 10 secondes sans lignes
+- Impossible de deviner tant que 0 lignes
+- Mobile ?
 
 ## Historique
 
