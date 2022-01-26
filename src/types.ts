@@ -1,5 +1,12 @@
 import { ContextFrom, EventFrom } from "xstate";
 import { GameModel } from "./machine/GameModel";
+import { ServerErrors } from "./constants";
+import { GameStates } from "./machine/GameStates";
+
+export type NominalType<T extends string> = { __type: T };
+
+export type PlayerId = string & NominalType<"PlayerId">;
+export type GameId = string & NominalType<"GameId">;
 
 export type Word = {
   name: string;
@@ -7,16 +14,16 @@ export type Word = {
 };
 
 export type Player = {
-  id: string;
+  id: PlayerId;
   name: string;
   ready: boolean;
   score: number;
 };
 
 export type Guess = {
-  word: string,
-  playerId: Player['id'],
-}
+  word: string;
+  playerId: PlayerId;
+};
 
 export type Line = {
   start: Point;
@@ -44,3 +51,18 @@ export type GameGuard<T extends GameEvent["type"] = GameEvent["type"]> = (
 export type GameEventEmitter = (event: GameEvent) => void;
 
 type ValueOf<T> = T[keyof T];
+
+export type SocketMessage =
+  | {
+      type: "auth";
+      playerId: PlayerId;
+    }
+  | {
+      type: "error";
+      code: ServerErrors;
+    }
+  | {
+      type: "gameUpdate";
+      state: GameStates;
+      context: GameContext;
+    };

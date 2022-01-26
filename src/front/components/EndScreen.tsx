@@ -6,13 +6,13 @@ import { Button } from "./ui/Button";
 import { useEffect } from "react";
 import confetti from "canvas-confetti";
 
-export function End() {
-  const { context, sendMessage, userId } = useGameContext();
+export function EndScreen() {
+  const { context, sendMessage, playerId } = useGameContext();
   const winner = context.players.find((p) => p.score >= context.scoreLimit);
   if (!winner) {
     throw new Error("Aucun joueur ne semble avoir gagné");
   }
-  const retryEvent = GameModel.events.retry(userId);
+  const retryEvent = GameModel.events.retry(playerId);
 
   const handleReset = () => {
     sendMessage(retryEvent);

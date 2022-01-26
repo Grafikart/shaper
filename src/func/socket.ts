@@ -1,14 +1,14 @@
 import { GameContext } from "../types";
 import { GameStates } from "../machine/GameStates";
-import { SocketStream } from "fastify-websocket";
+import { ConnectionRepository } from "../server/ConnectionRepository";
 
 export function publishContext(
   state: GameStates,
   context: GameContext,
-  connections: Map<string, SocketStream>
+  connections: ConnectionRepository
 ) {
   for (const player of context.players) {
-    const connection = connections.get(player.id);
+    const connection = connections.find(player.id);
     if (connection) {
       const isCurrentPlayer = player.id === context.currentPlayer?.id;
       connection.socket.send(
@@ -18,7 +18,10 @@ export function publishContext(
           context: {
             ...context,
             availableWords: isCurrentPlayer ? context.availableWords : [],
-            wordToGuess: isCurrentPlayer ? context.wordToGuess : null,
+            wordToGuess:
+              isCurrentPlayer || state !== GameStates.guessing
+                ? context.wordToGuess
+                : null,
           },
         })
       );

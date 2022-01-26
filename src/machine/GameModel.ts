@@ -1,5 +1,5 @@
 import { createModel } from "xstate/lib/model";
-import { Guess, Line, Player, Point, Word } from "../types";
+import { Guess, Line, Player, PlayerId, Point, Word } from "../types";
 
 export const GameModel = createModel(
   {
@@ -7,6 +7,7 @@ export const GameModel = createModel(
     lines: [] as Line[],
     seed: 0,
     linesLimit: 15,
+    guessDuration: 30,
     round: 0,
     currentPlayer: null as Player | null,
     availableWords: [] as Word[],
@@ -17,24 +18,24 @@ export const GameModel = createModel(
   },
   {
     events: {
-      join: (playerId: Player["id"], name: string) => ({ playerId, name }),
-      ready: (playerId: Player["id"]) => ({
+      join: (playerId: PlayerId, name: string) => ({ playerId, name }),
+      ready: (playerId: PlayerId) => ({
         playerId,
       }),
-      leave: (playerId: Player["id"]) => ({ playerId }),
-      start: (playerId: Player["id"]) => ({ playerId }),
-      chooseWord: (playerId: Player["id"], word: string) => ({
+      leave: (playerId: PlayerId) => ({ playerId }),
+      start: (playerId: PlayerId) => ({ playerId }),
+      chooseWord: (playerId: PlayerId, word: string) => ({
         playerId,
         word,
       }),
-      drawLine: (playerId: Player["id"], start: Point, end: Point) => ({
+      drawLine: (playerId: PlayerId, start: Point, end: Point) => ({
         start,
         end,
         playerId,
       }),
-      guessWord: (playerId: Player["id"], word: string) => ({ word, playerId }),
-      retry: (playerId: Player["id"]) => ({ playerId }),
-      ban: (playerId: Player["id"], banId: Player["id"]) => ({
+      guessWord: (playerId: PlayerId, word: string) => ({ word, playerId }),
+      retry: (playerId: PlayerId) => ({ playerId }),
+      ban: (playerId: PlayerId, banId: PlayerId) => ({
         playerId,
         banId,
       }),

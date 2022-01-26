@@ -8,9 +8,9 @@ import { CSSProperties } from "react";
 
 const smallGap = { "--gap": 0.5 } as CSSProperties;
 
-export function WordSelector() {
-  const { context, userId, sendMessage } = useGameContext();
-  if (userId !== context.currentPlayer?.id) {
+export function WordSelectorScreen() {
+  const { context, playerId, sendMessage } = useGameContext();
+  if (playerId !== context.currentPlayer?.id) {
     return (
       <Modal>
         <div className="stack center">
@@ -28,7 +28,7 @@ export function WordSelector() {
 
   const handleChooseWord = (word: string) => (e: SyntheticEvent) => {
     e.preventDefault();
-    sendMessage(GameModel.events.chooseWord(userId, word));
+    sendMessage(GameModel.events.chooseWord(playerId, word));
   };
 
   return (

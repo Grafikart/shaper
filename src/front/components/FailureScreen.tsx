@@ -1,10 +1,10 @@
 import { Modal } from "./ui/Modal";
-import { Lines } from "./Lines";
+import { Lines } from "./shared/Lines";
 import { useGameContext } from "../GameContextProvider";
 
-export function Failure() {
+export function FailureScreen() {
   const { context } = useGameContext();
-  const word = context.guesses[0].word;
+  const word = context.wordToGuess?.name;
   return (
     <Modal error>
       <svg

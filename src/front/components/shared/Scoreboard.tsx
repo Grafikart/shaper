@@ -1,14 +1,19 @@
 import type { CSSProperties, ReactNode } from "react";
-import { useGameContext } from "../GameContextProvider";
-import { SkullIcon } from "./ui/Icons";
-import { ButtonIcon } from "./ui/ButtonIcon";
-import { GameModel } from "../../machine/GameModel";
-import { prevent } from "../../func/dom";
-import { GameContext, GameEventEmitter, Player } from "../../types";
-import { canBan } from "../../machine/guards";
+import { useGameContext } from "../../GameContextProvider";
+import { SkullIcon } from "../ui/Icons";
+import { ButtonIcon } from "../ui/ButtonIcon";
+import { GameModel } from "../../../machine/GameModel";
+import { prevent } from "../../../func/dom";
+import {
+  GameContext,
+  GameEventEmitter,
+  Player,
+  PlayerId,
+} from "../../../types";
+import { canBan } from "../../../machine/guards";
 
 export function Scoreboard() {
-  const { context, sendMessage, userId } = useGameContext();
+  const { context, sendMessage, playerId } = useGameContext();
   const sortedPlayers = [...context.players].sort((a, b) => b.score - a.score);
 
   return (
@@ -19,7 +24,7 @@ export function Scoreboard() {
           <ScoreboardItem
             key={p.id}
             player={p}
-            currentPlayerId={userId}
+            currentPlayerId={playerId}
             sendMessage={sendMessage}
             context={context}
           />
@@ -30,7 +35,7 @@ export function Scoreboard() {
 }
 
 type ScoreboardItemProps = {
-  currentPlayerId: Player["id"];
+  currentPlayerId: PlayerId;
   player: Player;
   sendMessage: GameEventEmitter;
   context: GameContext;

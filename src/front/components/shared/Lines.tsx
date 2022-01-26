@@ -1,5 +1,5 @@
-import { Line } from "../../types";
-import { lengthForLine, pathForLine } from "../../func/svg";
+import { Line } from "../../../types";
+import { lengthForLine, pathForLine } from "../../../func/svg";
 
 type LinesProps = {
   lines: Line[];

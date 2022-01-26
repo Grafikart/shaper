@@ -1,66 +1,111 @@
 import type { ReactNode } from "react";
-import { createContext, useContext, useEffect, useState } from "react";
-import { GameContext, GameEvent, GameEventEmitter } from "../types";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+import {
+  GameContext,
+  GameEvent,
+  GameEventEmitter,
+  GameId,
+  PlayerId,
+  SocketMessage,
+} from "../types";
 import { GameStates } from "../machine/GameStates";
 import ReconnectingWebSocket from "reconnecting-websocket";
-
-type SocketMessage =
-  | {
-      type: "auth";
-      userId: string;
-    }
-  | {
-      type: "gameUpdate";
-      state: GameStates;
-      context: GameContext;
-    };
+import { UserSession } from "./UserSession";
+import { replaceQueryParams } from "../func/url";
+import { ServerErrors } from "../constants";
 
 type GameContextType = {
   state: GameStates;
   context: GameContext;
-  userId: string;
+  playerId: PlayerId;
   sendMessage: GameEventEmitter;
+  connect: (gameId: GameId, username?: string | null) => void;
+  connected: boolean;
 };
 
 const Context = createContext<GameContextType>({
   state: "lobby" as GameStates,
   context: {} as GameContext,
-  userId: "user",
+  playerId: "user" as PlayerId,
   sendMessage: () => null,
+  connect: () => null,
+  connected: false,
 });
 
 type Props = {
   children: ReactNode;
 };
 
-const searchParams = new URLSearchParams();
-const userId = localStorage.getItem("userId");
-if (userId) {
-  searchParams.set("userId", userId);
-}
-
-const socket = new ReconnectingWebSocket(
-  `${window.location.protocol.replace('http','ws')}//${window.location.host}/ws?${searchParams.toString()}`
-);
-const sendMessage: GameContextType["sendMessage"] = (data: GameEvent) => {
-  socket.send(JSON.stringify(data));
-};
-
-socket.addEventListener("close", () => {});
-
 export function GameContextProvider({ children }: Props) {
-  const [state, setState] = useState<Omit<GameContextType, "sendMessage">>({
+  const [socket, setSocket] = useState<ReconnectingWebSocket | null>(null);
+  const userSession = useMemo(() => new UserSession(), []);
+  const [state, setState] = useState<
+    Omit<GameContextType, "sendMessage" | "connect">
+  >({
     state: "" as GameStates,
-    userId: "",
+    playerId: "" as PlayerId,
     context: {} as GameContext,
+    connected: socket !== null,
   });
 
+  // Connecte un utilisateur à une partie
+  const connect: GameContextType["connect"] = (gameId, username) => {
+    const searchParams = new URLSearchParams();
+    const playerId = userSession.getId();
+    if (playerId) {
+      searchParams.set("playerId", playerId);
+    }
+    if (username) {
+      searchParams.set("username", username);
+    }
+    searchParams.set("gameId", gameId);
+    const socket = new ReconnectingWebSocket(
+      `${window.location.protocol.replace("http", "ws")}//${
+        window.location.host
+      }/ws?${searchParams.toString()}`
+    );
+
+    setSocket(socket);
+  };
+
+  // Envoie un message au websocket
+  const sendMessage: GameContextType["sendMessage"] = useCallback(
+    (data: GameEvent) => {
+      socket?.send(JSON.stringify(data));
+    },
+    [socket]
+  );
+
   useEffect(() => {
+    if (!socket) {
+      const url = new URL(window.location.href);
+      const gameId = url.searchParams.get("gameId") as GameId;
+      const name = url.searchParams.get("name");
+      if (gameId && name) {
+        connect(gameId, name);
+      }
+      return;
+    }
     const onMessage = (event: MessageEvent) => {
       const message = JSON.parse(event.data) as SocketMessage;
+
+      // En cas d'authentification
       if (message.type === "auth") {
-        localStorage.setItem("userId", message.userId);
-        setState((s) => ({ ...s, userId: message.userId }));
+        userSession.setId(message.playerId);
+        setState((s) => ({ ...s, playerId: message.playerId }));
+      } else if (message.type === "error") {
+        if (message.code === ServerErrors.AuthError) {
+          userSession.clear();
+        }
+        socket.close();
+        replaceQueryParams();
       } else {
         setState((s) => ({ ...s, ...message }));
       }
@@ -70,10 +115,10 @@ export function GameContextProvider({ children }: Props) {
     return () => {
       socket.removeEventListener("message", onMessage);
     };
-  }, []);
+  }, [socket]);
 
   return (
-    <Context.Provider value={{ ...state, sendMessage }}>
+    <Context.Provider value={{ ...state, sendMessage, connect }}>
       {children}
     </Context.Provider>
   );

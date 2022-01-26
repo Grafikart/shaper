@@ -16,6 +16,11 @@
   animation: stripe 10s linear infinite;
 }
 
+.btn-full {
+  text-align: center;
+  width: 100%;
+}
+
 .btn:disabled {
   pointer-events: none;
   --color: #c9c9c9;

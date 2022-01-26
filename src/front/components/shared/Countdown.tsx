@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ClockIcon } from "./ui/Icons";
+import { ClockIcon } from "../ui/Icons";
 import clsx from "clsx";
 
 type CountdownProps = {

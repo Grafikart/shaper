@@ -1,3 +1,21 @@
+# Système de rooms
+
+- Système en NodeJS pour signer des données (id en session)
+- Premier panneau pour entrer un pseudo ET lancer une partie
+- Comment on nettoie les partie ? 
+  - Une partie finie est détruite
+  - Limiter à 100 partie
+  - Si le joueur est déjà dans une partie, lorsqu'il en recrée une il supprime l'ancienne
+  - Une partie qui est sans joueur est supprimée
+  - ??? Une partie qui a commencée depuis plus de 30 minutes est supprimée
+
+- Quand un utilisateur arrive avec un lien ?gameId=12312321
+  - On lui demande son pseudo (sauf si il a un pseudo dans l'url)
+  - On le connecte au websocket
+  - On lui fait rejoindre la partie 
+  - Tout le monde est content
+
+
 ## TODO
 
 - Mettre en place le choix du pseudo pour les joueurs

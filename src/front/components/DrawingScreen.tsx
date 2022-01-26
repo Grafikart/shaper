@@ -4,13 +4,13 @@ import { useEffect, useRef, useState } from "react";
 import { Point } from "../../types";
 import { round } from "../../func/number";
 import { GameModel } from "../../machine/GameModel";
-import { Lines } from "./Lines";
+import { Lines } from "./shared/Lines";
 import { pathForLine } from "../../func/svg";
 import { canDrawLine } from "../../machine/guards";
-import { Countdown } from "./Countdown";
-import { GuessForm } from "./GuessForm";
-import { Guesses } from "./Guesses";
-import { Scoreboard } from "./Scoreboard";
+import { Countdown } from "./shared/Countdown";
+import { GuessForm } from "./shared/GuessForm";
+import { Guesses } from "./shared/Guesses";
+import { Scoreboard } from "./shared/Scoreboard";
 import { distance } from "../../func/geometry";
 
 const precision = 6;
@@ -32,8 +32,8 @@ const pointForEvent = (
 /**
  * Drawing screen
  */
-export function Drawing() {
-  const { context, sendMessage, userId } = useGameContext();
+export function DrawingScreen() {
+  const { context, sendMessage, playerId } = useGameContext();
   const [start, setStart] = useState<Point | null>(null);
   const [end, setEnd] = useState<Point | null>(null);
   const drawAreaRef = useRef<HTMLDivElement>(null);
@@ -55,7 +55,7 @@ export function Drawing() {
     const end = pointForEvent(e, drawAreaRef.current!);
     // We don't want user to send missclicked lines
     if (distance(startRef.current, end) > 0.01) {
-      sendMessage(GameModel.events.drawLine(userId, startRef.current, end));
+      sendMessage(GameModel.events.drawLine(playerId, startRef.current, end));
     }
     setStart(null);
     setEnd(null);

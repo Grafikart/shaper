@@ -1,24 +1,31 @@
-import type { ReactNode } from "react";
 import { useGameContext } from "./GameContextProvider";
-import { Lobby } from "./components/Lobby";
-import { WordSelector } from "./components/WordSelector";
+import { LobbyScreen } from "./components/LobbyScreen";
+import { WordSelectorScreen } from "./components/WordSelectorScreen";
 import { GameStates } from "../machine/GameStates";
-import { End } from "./components/End";
-import { Success } from "./components/Success";
-import { Failure } from "./components/Failure";
-import { Drawing } from "./components/Drawing";
-import { Guessing } from "./components/Guessing";
-
-type AppProps = {
-  children: ReactNode;
-};
+import { EndScreen } from "./components/EndScreen";
+import { SuccessScreen } from "./components/SuccessScreen";
+import { FailureScreen } from "./components/FailureScreen";
+import { DrawingScreen } from "./components/DrawingScreen";
+import { GuessingScreen } from "./components/GuessingScreen";
+import { HomeScreen } from "./components/HomeScreen";
+import { urlSearchParams } from "../func/url";
+import { JoinGameScreen } from "./components/JoinGameScreen";
 
 export function App() {
-  const { state, context, sendMessage, userId } = useGameContext();
+  const { state, context, playerId } = useGameContext();
+  const searchParams = urlSearchParams();
+
+  // Player is not yet connected to the websocket
+  if (!state) {
+    return searchParams.get("gameId") ? <JoinGameScreen /> : <HomeScreen />;
+  }
+
+  // Websockets are ready but the context is in a bad state
   if (!context.players) {
     return null;
   }
-  const me = context.players.find((p) => p.id === userId);
+
+  const me = context.players.find((p) => p.id === playerId);
   const isMeCurrentPlayer = me?.id === context.currentPlayer?.id;
   const modalStates = [
     GameStates.guessing,
@@ -28,18 +35,13 @@ export function App() {
   ];
   return (
     <div>
-      {me && <h2>{me.name}</h2>}
-      {state === GameStates.lobby && <Lobby />}
-      {state === GameStates.chooseWord && <WordSelector />}
+      {state === GameStates.lobby && <LobbyScreen />}
+      {state === GameStates.chooseWord && <WordSelectorScreen />}
       {modalStates.includes(state) &&
-        (isMeCurrentPlayer ? <Drawing /> : <Guessing />)}
-      {state === GameStates.success && <Success />}
-      {state === GameStates.failure && <Failure />}
-      {state === GameStates.end && <End />}
-      <p>
-        <strong>Etat :</strong> {state}
-      </p>
-      <pre>{JSON.stringify(context, null, 2)}</pre>
+        (isMeCurrentPlayer ? <DrawingScreen /> : <GuessingScreen />)}
+      {state === GameStates.success && <SuccessScreen />}
+      {state === GameStates.failure && <FailureScreen />}
+      {state === GameStates.end && <EndScreen />}
     </div>
   );
 }

@@ -1,11 +1,10 @@
-import type { ReactNode } from "react";
 import { useGameContext } from "../GameContextProvider";
-import { Lines } from "./Lines";
+import { Lines } from "./shared/Lines";
 import { Modal } from "./ui/Modal";
 
-export function Success() {
+export function SuccessScreen() {
   const { context } = useGameContext();
-  const word = context.guesses[0].word;
+  const word = context.wordToGuess?.name;
   const winner = context.players.find(
     (p) => p.id === context.guesses[0].playerId
   );

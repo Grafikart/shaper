@@ -108,14 +108,14 @@ export const GameMachine = GameModel.createMachine({
         ],
       },
       after: {
-        45000: {
+        30000: {
           target: GameStates.failure,
         },
       },
     },
     [GameStates.success]: {
       after: {
-        2000: [
+        5000: [
           {
             target: GameStates.chooseWord,
             cond: reverseGuard(hasWinner),
@@ -129,7 +129,7 @@ export const GameMachine = GameModel.createMachine({
     },
     [GameStates.failure]: {
       after: {
-        2000: [
+        5000: [
           {
             target: GameStates.chooseWord,
           },

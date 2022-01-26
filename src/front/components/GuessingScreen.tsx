@@ -1,22 +1,22 @@
 import { useGameContext } from "../GameContextProvider";
-import { Lines } from "./Lines";
+import { Lines } from "./shared/Lines";
 import { GameModel } from "../../machine/GameModel";
 import { FormEventHandler } from "react";
-import { Countdown } from "./Countdown";
-import { Scoreboard } from "./Scoreboard";
-import { GuessForm } from "./GuessForm";
-import { Guesses } from "./Guesses";
+import { Countdown } from "./shared/Countdown";
+import { Scoreboard } from "./shared/Scoreboard";
+import { GuessForm } from "./shared/GuessForm";
+import { Guesses } from "./shared/Guesses";
 import clsx from "clsx";
 
-export function Guessing() {
-  const { context, sendMessage, userId } = useGameContext();
+export function GuessingScreen() {
+  const { context, sendMessage, playerId } = useGameContext();
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
     const form = e.target as HTMLFormElement;
     const word = new FormData(form).get("word")?.toString() || "";
     if (word.length > 0) {
-      sendMessage(GameModel.events.guessWord(userId, word));
+      sendMessage(GameModel.events.guessWord(playerId, word));
       form.reset();
     }
   };

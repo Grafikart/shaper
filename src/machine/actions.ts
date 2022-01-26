@@ -1,8 +1,6 @@
 import type { GameAction, GameContext } from "../types";
 import { words } from "../server/config";
 import { shuffle } from "../func/array";
-import { Simulate } from "react-dom/test-utils";
-import contextMenu = Simulate.contextMenu;
 
 export const addPlayer: GameAction<"join"> = (context, event) => ({
   players: [
@@ -32,13 +30,13 @@ export const startGame: GameAction<"start"> = (context) => {
 
 export const chooseWord: GameAction<"chooseWord"> = (context, event) => ({
   availableWords: [],
-  roundEndAt: Date.now() + 45_000,
+  roundEndAt: Date.now() + context.guessDuration * 1000,
   wordToGuess: context.availableWords.find((w) => w.name === event.word),
 });
 
 export const chooseWordRandomly = (context: GameContext) => ({
   availableWords: [],
-  roundEndAt: Date.now() + 45_000,
+  roundEndAt: Date.now() + context.guessDuration * 1000,
   wordToGuess: context.availableWords.find((w) => w.score === 1),
 });
 
@@ -47,7 +45,7 @@ export const drawLine: GameAction<"drawLine"> = (context, event) => ({
 });
 
 export const guessWord: GameAction<"guessWord"> = (context, event) => ({
-  guesses: [...context.guesses, event],
+  guesses: [event, ...context.guesses],
 });
 
 export const addScore: GameAction<"guessWord"> = (context, event) => {

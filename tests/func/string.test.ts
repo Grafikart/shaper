@@ -1,4 +1,4 @@
-import { it, describe, expect, assert } from "vitest";
+import { it, describe, assert } from "vitest";
 import { wordProximity } from "../../src/func/string";
 
 describe("wordProximity", () => {

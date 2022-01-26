@@ -8,49 +8,55 @@ import { ButtonIcon } from "./ui/ButtonIcon";
 import { prevent } from "../../func/dom";
 import { CrossIcon, SkullIcon, SuccessIcon } from "./ui/Icons";
 import clsx from "clsx";
+import { Explanations } from "./shared/Explanations";
+import { QueryParams } from "../../constants";
 
 type LobbyProps = {
   context: GameContext;
   sendMessage: GameEventEmitter;
 };
 
-export function Lobby() {
-  const { context, sendMessage, userId } = useGameContext();
+export function LobbyScreen() {
+  const { context, sendMessage, playerId } = useGameContext();
   const handleReady = (e: SyntheticEvent) => {
     e.preventDefault();
-    sendMessage(GameModel.events.ready(userId));
+    sendMessage(GameModel.events.ready(playerId));
   };
   const handleStart: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
-    sendMessage(GameModel.events.start(userId));
+    sendMessage(GameModel.events.start(playerId));
   };
+
+  const copyLink = () => {
+    const url = new URL(window.location.href);
+    url.searchParams.delete(QueryParams.Name);
+    navigator.clipboard.writeText(url.toString());
+  };
+
   return (
     <div className="container layout-base">
-      <div className="card padded text-center">
-        <h2 className="mb-1">Bienvenue sur shaper</h2>
-        <p>
-          Le but du jeu est de faire deviner aux autres joueur un{" "}
-          <span className="word">mot</span> mais vous n'avez pas le droit qu'à{" "}
-          <mark>15 traits</mark> !
-        </p>
-      </div>
-      <div className="card padded stack">
-        <ul className="list">
-          {context.players.map((player) => (
-            <PlayerLine player={player} key={player.id} />
-          ))}
-        </ul>
+      <Explanations>
+        <Button onClick={copyLink}>Copier le lien d'invitation</Button>
+      </Explanations>
+      <div>
+        <div className="card padded stack">
+          <ul className="list">
+            {context.players.map((player) => (
+              <PlayerLine player={player} key={player.id} />
+            ))}
+          </ul>
 
-        {canReady(context, GameModel.events.ready(userId)) && (
-          <Button onClick={handleReady}>Je suis prêt</Button>
-        )}
+          {canReady(context, GameModel.events.ready(playerId)) && (
+            <Button onClick={handleReady}>Je suis prêt</Button>
+          )}
 
-        <Button
-          onClick={handleStart}
-          disabled={!canStartGame(context, { playerId: userId })}
-        >
-          Démarrer la partie
-        </Button>
+          <Button
+            onClick={handleStart}
+            disabled={!canStartGame(context, { playerId: playerId })}
+          >
+            Démarrer la partie
+          </Button>
+        </div>
       </div>
     </div>
   );
