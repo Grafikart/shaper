@@ -5,8 +5,7 @@
 - Limiter la taille des pseudos
 - Inverser scoreboard & devinage (limiter la hauteur)
 - Joueur déconnecté avec une couleur
-- Ne pas permettre 2 fois le même mot
-- Afficher un message en cas de kick
+w- Afficher un message en cas de kick
 - Limiter les devinages dans le temps (5 secondes)
 - Auto focus du champs pour entrer un mot
 - Mode spectateur qui peut ajouter des mots

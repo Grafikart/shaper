@@ -1,6 +1,6 @@
-import type { PointerEventHandler, ReactNode } from "react";
-import { useGameContext } from "../GameContextProvider";
+import type { PointerEventHandler } from "react";
 import { useEffect, useRef, useState } from "react";
+import { useGameContext } from "../GameContextProvider";
 import { Point } from "../../types";
 import { round } from "../../func/number";
 import { GameModel } from "../../machine/GameModel";
@@ -8,10 +8,10 @@ import { Lines } from "./shared/Lines";
 import { pathForLine } from "../../func/svg";
 import { canDrawLine } from "../../machine/guards";
 import { Countdown } from "./shared/Countdown";
-import { GuessForm } from "./shared/GuessForm";
 import { Guesses } from "./shared/Guesses";
 import { Scoreboard } from "./shared/Scoreboard";
 import { distance } from "../../func/geometry";
+import clsx from "clsx";
 
 const precision = 6;
 
@@ -80,7 +80,12 @@ export function DrawingScreen() {
 
   return (
     <div className="container">
-      <div className="layout-guess">
+      <div
+        className={clsx(
+          "layout-draw",
+          context.guesses.length == 0 && "layout-draw--no-guess"
+        )}
+      >
         <div className="drawarea card">
           <div className="drawarea__header">
             <div>

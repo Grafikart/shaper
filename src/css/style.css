@@ -27,6 +27,7 @@ html, body {
   font-size: 18px;
   color: var(--brown);
   font-weight: bold;
+  background-color: #FDBC4C;
 }
 
 body {

@@ -51,7 +51,7 @@
 .layout-draw {
   grid-template-areas:
           "canvas canvas"
-          "guesses scoreboard";
+          "scoreboard guesses";
 }
 
 
@@ -80,8 +80,15 @@
 
   .layout-draw {
     grid-template-areas:
-          "canvas scoreboard"
           "canvas guesses"
+          "canvas scoreboard"
+          "canvas empty"
+  }
+
+  .layout-draw--no-guess {
+    grid-template-areas:
+          "canvas scoreboard"
+          "canvas scoreboard"
   }
 }
 
@@ -89,16 +96,12 @@
   .layout-guess,
   .layout-draw {
     grid-template-columns: 1fr 350px;
+  }
+  .layout-guess {
     grid-template-areas:
             "canvas input"
-            "canvas scoreboard"
             "canvas guesses"
-            "canvas empty";
-  }
-  .layout-draw {
-    grid-template-areas:
             "canvas scoreboard"
-            "canvas guesses"
             "canvas empty";
   }
 

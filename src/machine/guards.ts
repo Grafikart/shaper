@@ -37,6 +37,10 @@ export const canChooseWord: GameGuard<"chooseWord"> = (context, event) => {
   );
 };
 
+export const canGuessWord: GameGuard<"guessWord"> = (context, event) => {
+  return context.guesses.find((w) => w.word === event.word) === undefined;
+};
+
 export const canDrawLine = (context: GameContext) => {
   return context.lines.length < context.linesLimit;
 };

@@ -127,3 +127,23 @@ export function GameContextProvider({ children }: Props) {
 export function useGameContext() {
   return useContext(Context);
 }
+
+export function FakeGameContextProvider(props: {
+  state: GameStates;
+  ctx: GameContext;
+  playerId: PlayerId;
+}) {
+  return (
+    <Context.Provider
+      value={{
+        state: props.state,
+        context: props.ctx,
+        playerId: props.playerId,
+        sendMessage: () => null,
+        connect: () => null,
+        connected: true,
+      }}
+      {...props}
+    />
+  );
+}

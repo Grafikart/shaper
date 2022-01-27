@@ -12,3 +12,18 @@
   background: var(--yellow);
   border-radius: 4px;
 }
+
+.list::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+.list::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  padding: 1px;
+}
+
+.list::-webkit-scrollbar-thumb {
+  background: var(--yellow);
+  border-radius: 4px;
+}

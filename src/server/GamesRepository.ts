@@ -18,9 +18,7 @@ export class GamesRepository {
   create(): GameId {
     const gameId = randomUUID() as GameId;
     const gameService = interpret(
-      GameMachine.withContext({
-        ...GameModel.initialContext,
-      })
+      GameMachine.withContext(GameModel.initialContext)
     )
       .onTransition((state) => {
         publishContext(

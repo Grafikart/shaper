@@ -5,6 +5,7 @@ import {
   canBan,
   canChooseWord,
   canDrawLine,
+  canGuessWord,
   canJoinGame,
   canReady,
   canStartGame,
@@ -85,7 +86,8 @@ export const GameMachine = GameModel.createMachine({
           {
             cond: combineGuards(
               reverseGuard(isCurrentPlayer),
-              reverseGuard(isRightWord)
+              reverseGuard(isRightWord),
+              canGuessWord
             ),
             actions: GameModel.assign(guessWord),
           },
