@@ -19,4 +19,8 @@ export class ConnectionRepository {
   find(id: PlayerId) {
     return this.connections.get(id);
   }
+
+  has(id: PlayerId) {
+    return this.connections.has(id);
+  }
 }

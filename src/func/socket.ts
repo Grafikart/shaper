@@ -1,10 +1,11 @@
 import { GameContext } from "../types";
 import { GameStates } from "../machine/GameStates";
 import { ConnectionRepository } from "../server/ConnectionRepository";
+import { InterpreterFrom } from "xstate";
+import { GameMachine } from "../machine/GameMachine";
 
 export function publishContext(
-  state: GameStates,
-  context: GameContext,
+  { value: state, context }: InterpreterFrom<typeof GameMachine>["state"],
   connections: ConnectionRepository
 ) {
   for (const player of context.players) {

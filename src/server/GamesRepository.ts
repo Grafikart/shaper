@@ -2,9 +2,8 @@ import { interpret, InterpreterFrom } from "xstate";
 import { GameMachine } from "../machine/GameMachine";
 import { GameModel } from "../machine/GameModel";
 import { publishContext } from "../func/socket";
-import { GameStates } from "../machine/GameStates";
 import { GameId } from "../types";
-import { randomUUID } from "node:crypto";
+import { v4 as uuid } from "uuid";
 import { ConnectionRepository } from "./ConnectionRepository";
 
 type Machine = InterpreterFrom<typeof GameMachine>;
@@ -16,16 +15,12 @@ export class GamesRepository {
   ) {}
 
   create(): GameId {
-    const gameId = randomUUID() as GameId;
+    const gameId = uuid() as GameId;
     const gameService = interpret(
       GameMachine.withContext(GameModel.initialContext)
     )
       .onTransition((state) => {
-        publishContext(
-          state.value as GameStates,
-          state.context,
-          this.connections
-        );
+        publishContext(state, this.connections);
       })
       .start();
     this.games.set(gameId, gameService);
@@ -34,5 +29,21 @@ export class GamesRepository {
 
   find(gameId: GameId) {
     return this.games.get(gameId);
+  }
+
+  /**
+   * Check the game status and destroy it if it's empty
+   */
+  check(gameId: GameId) {
+    const game = this.find(gameId);
+    if (!game) {
+      return;
+    }
+    const connectedPlayers = game.state.context.players.filter((p) =>
+      this.connections.has(p.id)
+    );
+    if (connectedPlayers.length === 0) {
+      this.games.delete(gameId);
+    }
   }
 }

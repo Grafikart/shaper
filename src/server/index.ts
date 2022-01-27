@@ -3,7 +3,7 @@ import FastifyWS from "fastify-websocket";
 import FastifyStatic from "fastify-static";
 import path from "path";
 import { GameModel } from "../machine/GameModel";
-import { randomUUID } from "node:crypto";
+import { v4 as uuid } from "uuid";
 import Randanimal from "randanimal";
 import { publishContext } from "../func/socket";
 import { GameStates } from "../machine/GameStates";
@@ -25,15 +25,17 @@ fastify.register(FastifyStatic, {
 fastify.get("/ws", { websocket: true }, (connection, req) => {
   const query = req.query as Record<string, string>;
   try {
-    const playerId = (
-      query.playerId ? query.playerId : randomUUID()
-    ) as PlayerId;
+    const playerId = (query.playerId ? query.playerId : uuid()) as PlayerId;
     const username = query.username ?? Randanimal.randanimalSync();
     const gameId = query.gameId as GameId;
+
+    // Connection is not allowed if we have not gameId
     if (!gameId) {
       connection.end();
       return;
     }
+
+    // Game not found
     const game = games.find(gameId);
     if (!game) {
       connection.socket.send(
@@ -41,28 +43,29 @@ fastify.get("/ws", { websocket: true }, (connection, req) => {
       );
       return;
     }
+
     connections.persist(playerId, connection);
     game.send(GameModel.events.join(playerId, username));
-    setTimeout(() => {
-      connection.socket.send(
-        JSON.stringify({
-          type: "auth",
-          playerId: playerId,
-        })
-      );
-    }, 2000);
-    publishContext(
-      game.state.value as GameStates,
-      game.state.context,
-      connections
+    // Send back the state of the game
+    publishContext(game.state, connections);
+
+    // Assign an ID for the user for reconnection
+    connection.socket.send(
+      JSON.stringify({
+        type: "auth",
+        playerId: playerId,
+      })
     );
+    // Broadcast the events received to the state machine
     connection.socket.on("message", (rawMessage) => {
       const message = JSON.parse(rawMessage.toLocaleString()) as GameEvent;
       game.send({ ...message, playerId: playerId });
     });
+    // The user is disconnected
     connection.socket.on("close", (message) => {
       connections.remove(playerId);
       game.send(GameModel.events.leave(playerId));
+      games.check(gameId);
     });
   } catch (e: any) {
     if (e.code === "ERR_CRYPTO_INVALID_IV") {
