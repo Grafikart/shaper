@@ -20,6 +20,8 @@ import ReconnectingWebSocket from "reconnecting-websocket";
 import { UserSession } from "./UserSession";
 import { replaceQueryParams } from "../func/url";
 import { ServerErrors } from "../constants";
+import { interpret } from "xstate";
+import { GameMachine } from "../machine/GameMachine";
 
 type GameContextType = {
   state: GameStates;
@@ -128,18 +130,34 @@ export function useGameContext() {
   return useContext(Context);
 }
 
+/**
+ * For test purpose
+ */
 export function FakeGameContextProvider(props: {
   state: GameStates;
   ctx: GameContext;
   playerId: PlayerId;
 }) {
+  const [context, setContext] = useState<GameContext>(props.ctx);
+  const [state, setState] = useState<GameStates>(props.state);
+
+  // Use a local machine for test purpose
+  const service = useMemo(() => {
+    return interpret(GameMachine.withContext(props.ctx))
+      .onTransition((state) => {
+        setContext(state.context);
+        setState(state.value as GameStates);
+      })
+      .start(props.state);
+  }, []);
+
   return (
     <Context.Provider
       value={{
-        state: props.state,
-        context: props.ctx,
+        state,
+        context,
         playerId: props.playerId,
-        sendMessage: () => null,
+        sendMessage: service.send,
         connect: () => null,
         connected: true,
       }}

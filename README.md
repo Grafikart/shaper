@@ -3,11 +3,9 @@
 - Signer l'ID
 - Ban dès le lobby
 - Limiter la taille des pseudos
-- Inverser scoreboard & devinage (limiter la hauteur)
 - Joueur déconnecté avec une couleur
-w- Afficher un message en cas de kick
+- Afficher un message en cas de kick
 - Limiter les devinages dans le temps (5 secondes)
-- Auto focus du champs pour entrer un mot
 - Mode spectateur qui peut ajouter des mots
 - Interaction twitch
   - Le tchat rajoute des mots

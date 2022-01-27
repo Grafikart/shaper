@@ -2,7 +2,6 @@ import { useGameContext } from "../../GameContextProvider";
 import { useMemo } from "react";
 import { keyBy } from "../../../func/array";
 import { Player } from "../../../types";
-import { wordProximity } from "../../../func/string";
 
 export function Guesses() {
   const { context } = useGameContext();

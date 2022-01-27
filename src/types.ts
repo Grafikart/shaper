@@ -23,6 +23,7 @@ export type Player = {
 export type Guess = {
   word: string;
   playerId: PlayerId;
+  time: number;
 };
 
 export type Line = {

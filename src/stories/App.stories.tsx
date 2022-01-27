@@ -25,6 +25,7 @@ const BaseContext: GameContext = {
   guesses: time(5, (k) => ({
     word: `Hello${k}`,
     playerId: players[1].id,
+    time: 0,
   })),
   wordToGuess: {
     name: "Cat",
@@ -52,27 +53,27 @@ HomeScreen.args = {
 export const Draw = Template.bind({});
 Draw.args = {
   state: GameStates.guessing,
-  ctx: BaseContext,
+  ctx: { ...BaseContext, roundEndAt: Date.now() + 50_000 },
   playerId: BaseContext.players[0].id,
 };
 
 export const DrawNoGuess = Template.bind({});
 DrawNoGuess.args = {
   state: GameStates.guessing,
-  ctx: { ...BaseContext, guesses: [] },
+  ctx: { ...BaseContext, guesses: [], roundEndAt: Date.now() + 50_000 },
   playerId: BaseContext.players[0].id,
 };
 
 export const Guessing = Template.bind({});
 Guessing.args = {
   state: GameStates.guessing,
-  ctx: BaseContext,
+  ctx: { ...BaseContext, roundEndAt: Date.now() + 50_000 },
   playerId: BaseContext.players[1].id,
 };
 
 export const GuessingNoGuess = Template.bind({});
 GuessingNoGuess.args = {
   state: GameStates.guessing,
-  ctx: { ...BaseContext, guesses: [] },
+  ctx: { ...BaseContext, guesses: [], roundEndAt: Date.now() + 50_000 },
   playerId: BaseContext.players[1].id,
 };

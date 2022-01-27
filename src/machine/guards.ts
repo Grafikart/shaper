@@ -38,7 +38,13 @@ export const canChooseWord: GameGuard<"chooseWord"> = (context, event) => {
 };
 
 export const canGuessWord: GameGuard<"guessWord"> = (context, event) => {
-  return context.guesses.find((w) => w.word === event.word) === undefined;
+  const lastGuessTime =
+    context.guesses.find((w) => w.playerId === event.playerId)?.time || 0;
+  const secondsSinceLastGuess = Date.now() - lastGuessTime;
+  return (
+    secondsSinceLastGuess > context.guessThrottle &&
+    context.guesses.find((w) => w.word === event.word) === undefined
+  );
 };
 
 export const canDrawLine = (context: GameContext) => {

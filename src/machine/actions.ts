@@ -45,7 +45,7 @@ export const drawLine: GameAction<"drawLine"> = (context, event) => ({
 });
 
 export const guessWord: GameAction<"guessWord"> = (context, event) => ({
-  guesses: [event, ...context.guesses],
+  guesses: [{ ...event, time: Date.now() }, ...context.guesses],
 });
 
 export const addScore: GameAction<"guessWord"> = (context, event) => {

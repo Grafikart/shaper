@@ -5,16 +5,17 @@ export const GameModel = createModel(
   {
     players: [] as Player[],
     lines: [] as Line[],
-    seed: 0,
-    linesLimit: 15,
-    guessDuration: 30,
+    seed: 0, // Number used to seed the
+    linesLimit: 15, // Max number of lines used for drawing
+    guessDuration: 30, // Time available ot guess the word (s)
     round: 0,
     currentPlayer: null as Player | null,
-    availableWords: [] as Word[],
+    availableWords: [] as Word[], // List of word available for drawing
     wordToGuess: null as Word | null,
-    guesses: [] as Guess[],
-    scoreLimit: 10,
-    roundEndAt: 0,
+    guesses: [] as Guess[], // List of guess done by players
+    scoreLimit: 10, // Score needed to win
+    guessThrottle: 3, // Duration between guesses (s)
+    roundEndAt: 0, // Round ending time (ms)
   },
   {
     events: {

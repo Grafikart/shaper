@@ -11,14 +11,8 @@ import clsx from "clsx";
 export function GuessingScreen() {
   const { context, sendMessage, playerId } = useGameContext();
 
-  const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
-    e.preventDefault();
-    const form = e.target as HTMLFormElement;
-    const word = new FormData(form).get("word")?.toString() || "";
-    if (word.length > 0) {
-      sendMessage(GameModel.events.guessWord(playerId, word));
-      form.reset();
-    }
+  const handleSubmit = (word: string) => {
+    sendMessage(GameModel.events.guessWord(playerId, word));
   };
 
   return (
@@ -42,7 +36,7 @@ export function GuessingScreen() {
             </svg>
           </div>
         </div>
-        <GuessForm onSubmit={handleSubmit} />
+        <GuessForm onSubmit={handleSubmit} delay={context.guessThrottle} />
         <Guesses />
         <Scoreboard />
       </div>
