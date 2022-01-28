@@ -8,7 +8,7 @@ export const isCurrentPlayer = (
   return context.currentPlayer?.id === event.playerId;
 };
 
-const isHost = (context: GameContext, playerId: string) => {
+export const isHost = (context: GameContext, playerId: string) => {
   return context.players[0].id === playerId;
 };
 

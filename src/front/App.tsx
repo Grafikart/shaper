@@ -8,12 +8,12 @@ import { FailureScreen } from "./components/FailureScreen";
 import { DrawingScreen } from "./components/DrawingScreen";
 import { GuessingScreen } from "./components/GuessingScreen";
 import { HomeScreen } from "./components/HomeScreen";
-import { urlSearchParams } from "../func/url";
 import { JoinGameScreen } from "./components/JoinGameScreen";
+import { useSearchParams } from "../hooks/useSearchParams";
 
 export function App() {
   const { state, context, playerId } = useGameContext();
-  const searchParams = urlSearchParams();
+  const searchParams = useSearchParams();
 
   // Player is not yet connected to the websocket
   if (!state) {

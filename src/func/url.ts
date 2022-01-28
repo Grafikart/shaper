@@ -14,5 +14,6 @@ export function replaceQueryParams(
   } else {
     url.searchParams.forEach((_, k) => url.searchParams.delete(k));
   }
-  return history.replaceState(null, "", url);
+  history.replaceState(null, "", url);
+  window.dispatchEvent(new CustomEvent("replacestate"));
 }

@@ -9,8 +9,8 @@
   },
   "scripts": {
     "dev": "concurrently \"npm:start:watch\" \"vite\"",
-    "start:watch": "nodemon --ignore state.json src/server/index.ts",
-    "start": "npx esmo ./src/server/index.ts",
+    "start:watch": "nodemon --ignore state.json src/server/server.ts",
+    "start": "npx esmo src/server/server.ts",
     "test": "vitest run",
     "test:watch": "vitest watch",
     "coverage": "vitest --coverage",
@@ -67,6 +67,6 @@
     "xstate": "4.27.0"
   },
   "volta": {
-    "node": "17.4.0"
+    "node": "16.13.2"
   }
 }

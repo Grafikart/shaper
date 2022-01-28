@@ -10,6 +10,10 @@
   gap: calc(var(--gap, 0) * 1rem);
 }
 
+.middle {
+  justify-content: center;
+}
+
 .stack {
   --gap: 1;
   display: flex;
@@ -22,6 +26,10 @@
 
 .stack > * + * {
   margin-top: calc(var(--gap, 0.5) * 1rem);
+}
+
+.mb {
+  margin-bottom: .5em;
 }
 
 .mb-1 {

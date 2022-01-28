@@ -13,11 +13,12 @@ import {
   GameEventEmitter,
   GameId,
   PlayerId,
+  PlayerSession,
   SocketMessage,
 } from "../types";
 import { GameStates } from "../machine/GameStates";
 import ReconnectingWebSocket from "reconnecting-websocket";
-import { UserSession } from "./UserSession";
+import { PlayerSessionPersister } from "./PlayerSessionPersister";
 import { replaceQueryParams } from "../func/url";
 import { ServerErrors } from "../constants";
 import { interpret } from "xstate";
@@ -28,7 +29,7 @@ type GameContextType = {
   context: GameContext;
   playerId: PlayerId;
   sendMessage: GameEventEmitter;
-  connect: (gameId: GameId, username?: string | null) => void;
+  connect: (gameId: GameId, session: PlayerSession) => void;
   connected: boolean;
 };
 
@@ -47,7 +48,6 @@ type Props = {
 
 export function GameContextProvider({ children }: Props) {
   const [socket, setSocket] = useState<ReconnectingWebSocket | null>(null);
-  const userSession = useMemo(() => new UserSession(), []);
   const [state, setState] = useState<
     Omit<GameContextType, "sendMessage" | "connect">
   >({
@@ -58,22 +58,17 @@ export function GameContextProvider({ children }: Props) {
   });
 
   // Connecte un utilisateur à une partie
-  const connect: GameContextType["connect"] = (gameId, username) => {
-    const searchParams = new URLSearchParams();
-    const playerId = userSession.getId();
-    if (playerId) {
-      searchParams.set("playerId", playerId);
-    }
-    if (username) {
-      searchParams.set("username", username);
-    }
-    searchParams.set("gameId", gameId);
+  const connect: GameContextType["connect"] = (gameId, session) => {
+    const searchParams = new URLSearchParams({
+      ...session,
+      gameId,
+    });
     const socket = new ReconnectingWebSocket(
       `${window.location.protocol.replace("http", "ws")}//${
         window.location.host
       }/ws?${searchParams.toString()}`
     );
-
+    setState((s) => ({ ...s, playerId: session.playerId }));
     setSocket(socket);
   };
 
@@ -89,9 +84,9 @@ export function GameContextProvider({ children }: Props) {
     if (!socket) {
       const url = new URL(window.location.href);
       const gameId = url.searchParams.get("gameId") as GameId;
-      const name = url.searchParams.get("name");
-      if (gameId && name) {
-        connect(gameId, name);
+      const playerSession = PlayerSessionPersister.getPlayer();
+      if (gameId && playerSession) {
+        connect(gameId, playerSession);
       }
       return;
     }
@@ -99,12 +94,9 @@ export function GameContextProvider({ children }: Props) {
       const message = JSON.parse(event.data) as SocketMessage;
 
       // En cas d'authentification
-      if (message.type === "auth") {
-        userSession.setId(message.playerId);
-        setState((s) => ({ ...s, playerId: message.playerId }));
-      } else if (message.type === "error") {
+      if (message.type === "error") {
         if (message.code === ServerErrors.AuthError) {
-          userSession.clear();
+          PlayerSessionPersister.clear();
         }
         socket.close();
         replaceQueryParams();

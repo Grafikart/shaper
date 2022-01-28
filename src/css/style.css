@@ -34,3 +34,7 @@ body {
   background: url(/img/food.png) repeat;
   font-family: "Nunito", sans-serif;
 }
+
+p a {
+  color: var(--brown);
+}

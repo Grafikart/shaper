@@ -10,6 +10,7 @@ type GuessFormProps = {
 export function GuessForm({ onSubmit, delay }: GuessFormProps) {
   const timerRef = useRef<number | undefined>(undefined);
   const [disabled, setDisabled] = useState(false);
+  const refInput = useRef<HTMLInputElement>(null);
 
   const handleSubmit: FormEventHandler = (e) => {
     e.preventDefault();
@@ -27,6 +28,12 @@ export function GuessForm({ onSubmit, delay }: GuessFormProps) {
 
   useEffect(() => () => clearTimeout(timerRef.current), []);
 
+  useEffect(() => {
+    if (!disabled) {
+      refInput.current?.focus();
+    }
+  }, [disabled]);
+
   return (
     <form
       className="card guess-form"
@@ -36,6 +43,8 @@ export function GuessForm({ onSubmit, delay }: GuessFormProps) {
     >
       <input
         autoFocus
+        ref={refInput}
+        autoComplete="off"
         disabled={disabled}
         name="word"
         type="text"

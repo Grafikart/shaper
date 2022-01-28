@@ -1,6 +1,12 @@
 import { GameContext, GameEventEmitter, Player } from "../../types";
 import { GameModel } from "../../machine/GameModel";
-import { canBan, canReady, canStartGame } from "../../machine/guards";
+import {
+  canBan,
+  canJoinGame,
+  canReady,
+  canStartGame,
+  isHost,
+} from "../../machine/guards";
 import { useGameContext } from "../GameContextProvider";
 import { CSSProperties, MouseEventHandler, SyntheticEvent } from "react";
 import { Button } from "./ui/Button";
@@ -31,11 +37,15 @@ export function LobbyScreen() {
     const url = new URL(window.location.href);
     url.searchParams.delete(QueryParams.Name);
     navigator.clipboard.writeText(url.toString());
+    alert("Le lien a été copié dans le presse-papier");
   };
+
+  const showGameLink = !isHost(context, playerId);
+  const canStart = canStartGame(context, GameModel.events.start(playerId));
 
   return (
     <div className="container layout-base">
-      <Explanations>
+      <Explanations gameLink={showGameLink}>
         <Button onClick={copyLink}>Copier le lien d'invitation</Button>
       </Explanations>
       <div>
@@ -50,10 +60,7 @@ export function LobbyScreen() {
             <Button onClick={handleReady}>Je suis prêt</Button>
           )}
 
-          <Button
-            onClick={handleStart}
-            disabled={!canStartGame(context, { playerId: playerId })}
-          >
+          <Button onClick={handleStart} disabled={!canStart}>
             Démarrer la partie
           </Button>
         </div>

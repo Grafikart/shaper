@@ -20,7 +20,6 @@ export function EndScreen() {
 
   useEffect(() => {
     const y = window.innerHeight / 2;
-    console.log(y);
     confetti({
       particleCount: 100,
       zIndex: 3000,

@@ -14,8 +14,7 @@ export class GamesRepository {
     private games = new Map<GameId, Machine>()
   ) {}
 
-  create(): GameId {
-    const gameId = uuid() as GameId;
+  create(id: GameId) {
     const gameService = interpret(
       GameMachine.withContext(GameModel.initialContext)
     )
@@ -23,8 +22,8 @@ export class GamesRepository {
         publishContext(state, this.connections);
       })
       .start();
-    this.games.set(gameId, gameService);
-    return gameId;
+    this.games.set(id, gameService);
+    return gameService;
   }
 
   find(gameId: GameId) {

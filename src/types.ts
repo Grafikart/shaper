@@ -55,10 +55,6 @@ type ValueOf<T> = T[keyof T];
 
 export type SocketMessage =
   | {
-      type: "auth";
-      playerId: PlayerId;
-    }
-  | {
       type: "error";
       code: ServerErrors;
     }
@@ -67,3 +63,17 @@ export type SocketMessage =
       state: GameStates;
       context: GameContext;
     };
+
+export type CreatePlayerResponse = {
+  playerId: PlayerId;
+  signature: string;
+};
+
+/**
+ * Save the player information used for reconnection
+ */
+export type PlayerSession = {
+  playerId: PlayerId;
+  signature: string;
+  name: string;
+};
