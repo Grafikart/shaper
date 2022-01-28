@@ -1,4 +1,3 @@
-import { GameContext } from "../types";
 import { GameStates } from "../machine/GameStates";
 import { ConnectionRepository } from "../server/ConnectionRepository";
 import { InterpreterFrom } from "xstate";

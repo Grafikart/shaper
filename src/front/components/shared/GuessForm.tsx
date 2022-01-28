@@ -45,7 +45,6 @@ export function GuessForm({ onSubmit, delay }: GuessFormProps) {
         autoFocus
         ref={refInput}
         autoComplete="off"
-        disabled={disabled}
         name="word"
         type="text"
         placeholder="Entrez votre mot"
