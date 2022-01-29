@@ -38,7 +38,8 @@ export function WordSelectorScreen() {
         <ul className="flex" style={smallGap}>
           {context.availableWords.map((word) => (
             <li className="stack" style={smallGap} key={word.name}>
-              <span className="word">{word.name}</span> ({word.score} points)
+              <span className="word">{word.name}</span>{" "}
+              ({word.score} point{word.score > 1 ? "s" : ""})
               <br />
               <Button onClick={handleChooseWord(word.name)}>
                 Choisir ce mot

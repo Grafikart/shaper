@@ -14,10 +14,10 @@ export function Explanations({
   return (
     <div className="card padded text-center">
       <h2 style={{ marginBottom: ".5em" }}>
-        {title ?? "Bienvenue sur shaper"}
+        {title ?? "Bienvenue sur Shaper"}
       </h2>
       <p className="mb">
-        Le but du jeu est de faire deviner aux autres joueur un{" "}
+        Le but du jeu est de faire deviner aux autres joueurs un{" "}
         <span className="word">mot</span> mais vous n'avez droit qu'à{" "}
         <mark>15 traits</mark> !
       </p>
